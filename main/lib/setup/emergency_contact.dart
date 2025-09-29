@@ -14,9 +14,11 @@ class _EmergencyContactPageState extends State<EmergencyContactPage> {
   Future<void> requestContactPermission() async {
     // First check current status
     final currentStatus = await Permission.contacts.status;
-    print('Current permission status: $currentStatus');
+    debugPrint('Current permission status: $currentStatus');
 
     final status = await Permission.contacts.request();
+
+    if (!mounted) return;
 
     if (status.isGranted) {
       // Permission granted - you can now access contacts
