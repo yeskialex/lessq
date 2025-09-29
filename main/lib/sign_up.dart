@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'setup/emergency_contact.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -239,24 +240,32 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 40),
 
               // Continue Button
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: ShapeDecoration(
-                  color: isFormComplete ? const Color(0xFFDCFF00) : const Color(0xFF464646),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              GestureDetector(
+                onTap: isFormComplete ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const EmergencyContactPage()),
+                  );
+                } : null,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  decoration: ShapeDecoration(
+                    color: isFormComplete ? const Color(0xFFDCFF00) : const Color(0xFF464646),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                ),
-                child: Text(
-                  'Continue',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: isFormComplete ? Colors.black : Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    height: 1.50,
+                  child: Text(
+                    'Continue',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isFormComplete ? Colors.black : Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      height: 1.50,
+                    ),
                   ),
                 ),
               ),
