@@ -161,7 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
               // Email Field
               _buildTappableInputField(
-                'Email adress*',
+                'Email address*',
                 email.isEmpty ? '@email.com' : email,
                 'assets/icons/app_icons_gray/email.svg',
                 generateEmail,

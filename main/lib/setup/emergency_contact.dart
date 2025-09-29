@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'predefined_message.dart';
 
 class EmergencyContactPage extends StatefulWidget {
   const EmergencyContactPage({super.key});
@@ -9,44 +11,61 @@ class EmergencyContactPage extends StatefulWidget {
 }
 
 class _EmergencyContactPageState extends State<EmergencyContactPage> {
+  List<String> emergencyContacts = [];
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollIndicator = false;
 
-  // Request contact permission
-  Future<void> requestContactPermission() async {
-    // First check current status
-    final currentStatus = await Permission.contacts.status;
-    debugPrint('Current permission status: $currentStatus');
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
 
-    final status = await Permission.contacts.request();
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-    if (!mounted) return;
+  void _scrollListener() {
+    setState(() {
+      _showScrollIndicator = true;
+    });
 
-    if (status.isGranted) {
-      // Permission granted - you can now access contacts
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Contact permission granted!'),
-          backgroundColor: Color(0xFFDCFF00),
-        ),
-      );
-      // Here you would typically open a contact picker
-      // For now, we'll just show the success message
-    } else if (status.isDenied) {
-      // Permission denied
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Contact permission denied'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } else if (status.isPermanentlyDenied) {
-      // Permission permanently denied, open app settings
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enable contacts in Settings'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      openAppSettings();
+    // Hide scroll indicator after scrolling stops
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _showScrollIndicator = false;
+        });
+      }
+    });
+  }
+
+  Future<void> pickContact() async {
+    try {
+      final permissionStatus = await Permission.contacts.request();
+
+      if (permissionStatus.isGranted) {
+        final Contact? contact = await ContactsService.openDeviceContactPicker();
+
+        if (!mounted) return;
+
+        if (contact != null && contact.displayName != null) {
+          // Check if contact already exists
+          if (!emergencyContacts.contains(contact.displayName!)) {
+            setState(() {
+              emergencyContacts.add(contact.displayName!);
+            });
+            debugPrint('Selected contact: ${contact.displayName}');
+          } else {
+            debugPrint('Contact already exists: ${contact.displayName}');
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error picking contact: $e');
     }
   }
 
@@ -78,7 +97,7 @@ class _EmergencyContactPageState extends State<EmergencyContactPage> {
 
               // Subtitle
               Text(
-                'Select your emergency contact',
+                emergencyContacts.isEmpty ? 'Select your emergency contact' : 'Confirm your contact(s)?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.75),
@@ -89,12 +108,84 @@ class _EmergencyContactPageState extends State<EmergencyContactPage> {
                 ),
               ),
 
-              // Spacer to push content to bottom
-              const Spacer(),
+              const SizedBox(height: 32),
+
+              // Emergency contacts list (scrollable)
+              Expanded(
+                child: emergencyContacts.isEmpty
+                    ? const SizedBox.shrink()
+                    : Stack(
+                        children: [
+                          ListView.builder(
+                            controller: _scrollController,
+                            itemCount: emergencyContacts.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 57,
+                                  decoration: ShapeDecoration(
+                                    color: const Color(0xFFDCFF00),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 37.51,
+                                        height: 37.51,
+                                        margin: const EdgeInsets.only(left: 16),
+                                        decoration: const ShapeDecoration(
+                                          color: Colors.black,
+                                          shape: OvalBorder(),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Text(
+                                          emergencyContacts[index],
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                            height: 1.50,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          // List indicator (scrollbar) - only shows when scrolling
+                          if (_showScrollIndicator && emergencyContacts.length > 3)
+                            Positioned(
+                              right: -5,
+                              top: 0,
+                              bottom: 16,
+                              child: AnimatedOpacity(
+                                opacity: _showScrollIndicator ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 300),
+                                child: Container(
+                                  width: 6,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+              ),
 
               // Add new contact button
               GestureDetector(
-                onTap: requestContactPermission,
+                onTap: pickContact,
                 child: Container(
                   width: double.infinity,
                   height: 57,
@@ -145,24 +236,32 @@ class _EmergencyContactPageState extends State<EmergencyContactPage> {
               const SizedBox(height: 40),
 
               // Save button
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: ShapeDecoration(
-                  color: const Color(0xFF888888),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              GestureDetector(
+                onTap: emergencyContacts.isNotEmpty ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PredefinedMessagePage()),
+                  );
+                } : null,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  decoration: ShapeDecoration(
+                    color: emergencyContacts.isNotEmpty ? const Color(0xFFDCFF00) : const Color(0xFF888888),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                ),
-                child: Text(
-                  'Save',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    height: 1.50,
+                  child: Text(
+                    'Save',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      height: 1.50,
+                    ),
                   ),
                 ),
               ),
@@ -170,15 +269,23 @@ class _EmergencyContactPageState extends State<EmergencyContactPage> {
               const SizedBox(height: 24),
 
               // Skip for now
-              Text(
-                'Skip for now',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  height: 1.50,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PredefinedMessagePage()),
+                  );
+                },
+                child: Text(
+                  'Skip for now',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    height: 1.50,
+                  ),
                 ),
               ),
 
