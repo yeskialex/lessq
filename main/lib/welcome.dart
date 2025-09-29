@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'sign_up.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -56,27 +57,35 @@ class WelcomePage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFDCFF00),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const SignUpPage()),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
                           ),
-                        ),
-                        child: const Text(
-                          'Sign up',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            height: 1.50,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFDCFF00),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: const Text(
+                            'Sign up',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 1.50,
+                            ),
                           ),
                         ),
                       ),
@@ -93,16 +102,6 @@ class WelcomePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 32),
-                      Container(
-                        width: 134,
-                        height: 5,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      ),
                       const SizedBox(height: 16),
                     ],
                   ),
