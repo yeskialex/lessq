@@ -1,7 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class EmergencyContactPage extends StatelessWidget {
+class EmergencyContactPage extends StatefulWidget {
   const EmergencyContactPage({super.key});
+
+  @override
+  State<EmergencyContactPage> createState() => _EmergencyContactPageState();
+}
+
+class _EmergencyContactPageState extends State<EmergencyContactPage> {
+
+  // Request contact permission
+  Future<void> requestContactPermission() async {
+    // First check current status
+    final currentStatus = await Permission.contacts.status;
+    print('Current permission status: $currentStatus');
+
+    final status = await Permission.contacts.request();
+
+    if (status.isGranted) {
+      // Permission granted - you can now access contacts
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Contact permission granted!'),
+          backgroundColor: Color(0xFFDCFF00),
+        ),
+      );
+      // Here you would typically open a contact picker
+      // For now, we'll just show the success message
+    } else if (status.isDenied) {
+      // Permission denied
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Contact permission denied'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied, open app settings
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enable contacts in Settings'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      openAppSettings();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,49 +91,52 @@ class EmergencyContactPage extends StatelessWidget {
               const Spacer(),
 
               // Add new contact button
-              Container(
-                width: double.infinity,
-                height: 57,
-                decoration: ShapeDecoration(
-                  color: const Color(0xFF464646),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              GestureDetector(
+                onTap: requestContactPermission,
+                child: Container(
+                  width: double.infinity,
+                  height: 57,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFF464646),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 60),
-                        child: Text(
-                          'Add new contact?',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.75),
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            height: 1.50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 60),
+                          child: Text(
+                            'Add new contact?',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.75),
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              height: 1.50,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      width: 37.51,
-                      height: 37.51,
-                      margin: const EdgeInsets.only(right: 16),
-                      decoration: const ShapeDecoration(
-                        color: Color(0xFFDCFF00),
-                        shape: OvalBorder(),
+                      Container(
+                        width: 37.51,
+                        height: 37.51,
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: const ShapeDecoration(
+                          color: Color(0xFFDCFF00),
+                          shape: OvalBorder(),
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.black,
+                          size: 20,
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.black,
-                        size: 20,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
 
