@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'dart:io';
+import 'notifications.dart';
 
 class SmartWatchPage extends StatefulWidget {
   const SmartWatchPage({super.key});
@@ -11,32 +13,110 @@ class SmartWatchPage extends StatefulWidget {
 class _SmartWatchPageState extends State<SmartWatchPage> {
   Future<void> requestBluetoothPermission() async {
     try {
-      // Try multiple Bluetooth-related permissions
-      await [
-        Permission.bluetooth,
-        Permission.bluetoothScan,
-        Permission.bluetoothConnect,
-        Permission.bluetoothAdvertise,
-      ].request();
+      if (Platform.isIOS) {
+        // On iOS, we need to actually use Bluetooth APIs to trigger the permission dialog
+        debugPrint('Requesting Bluetooth access on iOS...');
 
-      if (!mounted) return;
+        // Check if Bluetooth is supported
+        if (await FlutterBluePlus.isSupported == false) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Bluetooth not supported on this device'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
+          return;
+        }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Bluetooth permissions requested'),
-          backgroundColor: Colors.blue,
-          duration: Duration(seconds: 2),
-        ),
-      );
+        // Turn on Bluetooth adapter (this triggers the permission dialog)
+        await FlutterBluePlus.turnOn();
+
+        // Check adapter state
+        final adapterState = await FlutterBluePlus.adapterState.first;
+        debugPrint('Bluetooth adapter state: $adapterState');
+
+        if (!mounted) return;
+
+        String message;
+        Color backgroundColor;
+
+        switch (adapterState) {
+          case BluetoothAdapterState.on:
+            message = 'Bluetooth enabled! Smart watch connectivity ready.';
+            backgroundColor = Colors.green;
+
+            // Start scanning briefly to ensure permission is triggered
+            try {
+              await FlutterBluePlus.startScan(timeout: const Duration(seconds: 1));
+              await FlutterBluePlus.stopScan();
+            } catch (e) {
+              debugPrint('Scan error (expected): $e');
+            }
+            break;
+          case BluetoothAdapterState.off:
+            message = 'Bluetooth is turned off. Please enable Bluetooth.';
+            backgroundColor = Colors.orange;
+            break;
+          case BluetoothAdapterState.unavailable:
+            message = 'Bluetooth unavailable on this device.';
+            backgroundColor = Colors.red;
+            break;
+          case BluetoothAdapterState.unauthorized:
+            message = 'Bluetooth access denied. Enable in Settings > Privacy & Security > Bluetooth';
+            backgroundColor = Colors.red;
+            break;
+          default:
+            message = 'Bluetooth status: $adapterState';
+            backgroundColor = Colors.blue;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: backgroundColor,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate to notifications page immediately after permission response
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NotificationsPage()),
+        );
+      } else {
+        // Android or other platforms
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bluetooth permission handling for this platform'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate to notifications page immediately
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NotificationsPage()),
+        );
+      }
     } catch (e) {
       debugPrint('Error requesting bluetooth permission: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Bluetooth permission requested'),
+            content: Text('Bluetooth access requested'),
             backgroundColor: Colors.blue,
             duration: const Duration(seconds: 2),
           ),
+        );
+
+        // Navigate to notifications page immediately even if there's an error
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NotificationsPage()),
         );
       }
     }
@@ -113,15 +193,23 @@ class _SmartWatchPageState extends State<SmartWatchPage> {
               const SizedBox(height: 24),
 
               // Skip for now
-              Text(
-                'Skip for now',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  height: 1.50,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NotificationsPage()),
+                  );
+                },
+                child: Text(
+                  'Skip for now',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    height: 1.50,
+                  ),
                 ),
               ),
 

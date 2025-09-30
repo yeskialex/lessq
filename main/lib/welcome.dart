@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'sign_up.dart';
+import 'home/bottom_navigation.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -90,15 +91,23 @@ class WelcomePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const Text(
-                        'I have an account',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          height: 1.50,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomeBottomNavigation(currentIndex: 0)), // Go directly to hike page
+                          );
+                        },
+                        child: const Text(
+                          'I have an account',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            height: 1.50,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 32),
