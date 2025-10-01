@@ -8,6 +8,54 @@ import UIKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+
+    // Setup native alert channel
+    let controller = window?.rootViewController as! FlutterViewController
+    let nativeAlertChannel = FlutterMethodChannel(
+      name: "com.lessq/native_alert",
+      binaryMessenger: controller.binaryMessenger
+    )
+
+    nativeAlertChannel.setMethodCallHandler { [weak self] (call, result) in
+      if call.method == "showAlert" {
+        self?.showNativeAlert(call: call, result: result, controller: controller)
+      } else {
+        result(FlutterMethodNotImplemented)
+      }
+    }
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  private func showNativeAlert(call: FlutterMethodCall, result: @escaping FlutterResult, controller: UIViewController) {
+    guard let args = call.arguments as? [String: Any],
+          let title = args["title"] as? String,
+          let message = args["message"] as? String,
+          let pauseButton = args["pauseButton"] as? String,
+          let cancelButton = args["cancelButton"] as? String else {
+      result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing required arguments", details: nil))
+      return
+    }
+
+    // Create native iOS alert
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+    // Pause button (primary action)
+    let pauseAction = UIAlertAction(title: pauseButton, style: .default) { _ in
+      result("pause")
+    }
+
+    // Cancel button (secondary action)
+    let cancelAction = UIAlertAction(title: cancelButton, style: .cancel) { _ in
+      result("cancel")
+    }
+
+    alert.addAction(pauseAction)
+    alert.addAction(cancelAction)
+
+    // Present on main thread
+    DispatchQueue.main.async {
+      controller.present(alert, animated: true, completion: nil)
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:main/services/native_alert_service.dart';
 
 class HikeActivePage extends StatefulWidget {
   final String trailTitle;
@@ -27,6 +28,14 @@ class _HikeActivePageState extends State<HikeActivePage> {
   int _calories = 0;
   bool _isPaused = false;
   int _distanceToNextStop = 200;
+  bool _hasShownCliffWarning = false;
+  bool _hasShownChestPainWarning = false;
+  bool _hasShownDaylightWarning = false;
+  bool _hasShownOffTrailWarning = false;
+  bool _hasShownHeavyRainWarning = false;
+  bool _hasShownNearbyAssistanceWarning = false;
+  bool _hasShownDangerousTrailWarning = false;
+  bool _hasShownGKimiWarning = false;
 
   @override
   void initState() {
@@ -53,9 +62,274 @@ class _HikeActivePageState extends State<HikeActivePage> {
 
           // Update distance to next stop (decrease by 2m per second)
           _distanceToNextStop = math.max(0, 200 - (_elapsedSeconds * 2) % 200);
+
+          // Trigger chest pain warning at 7% progress
+          if (_progress >= 0.07 && !_hasShownChestPainWarning) {
+            _hasShownChestPainWarning = true;
+            _showChestPainWarning();
+          }
+
+          // Trigger daylight warning at 11% progress
+          if (_progress >= 0.11 && !_hasShownDaylightWarning) {
+            _hasShownDaylightWarning = true;
+            _showDaylightWarning();
+          }
+
+          // Trigger off-trail warning at 15% progress
+          if (_progress >= 0.15 && !_hasShownOffTrailWarning) {
+            _hasShownOffTrailWarning = true;
+            _showOffTrailWarning();
+          }
+
+          // Trigger heavy rain warning at 18% progress
+          if (_progress >= 0.18 && !_hasShownHeavyRainWarning) {
+            _hasShownHeavyRainWarning = true;
+            _showHeavyRainWarning();
+          }
+
+          // Trigger nearby assistance warning at 23% progress
+          if (_progress >= 0.23 && !_hasShownNearbyAssistanceWarning) {
+            _hasShownNearbyAssistanceWarning = true;
+            _showNearbyAssistanceWarning();
+          }
+
+          // Trigger dangerous trail warning at 26% progress
+          if (_progress >= 0.26 && !_hasShownDangerousTrailWarning) {
+            _hasShownDangerousTrailWarning = true;
+            _showDangerousTrailWarning();
+          }
+
+          // Trigger cliff warning at 30% progress (example trigger point)
+          if (_progress >= 0.03 && !_hasShownCliffWarning) {
+            _hasShownCliffWarning = true;
+            _showCliffWarning();
+          }
+
+          // Trigger G-KIMI warning at 33% progress
+          if (_progress >= 0.33 && !_hasShownGKimiWarning) {
+            _hasShownGKimiWarning = true;
+            _showGKimiWarning();
+          }
         });
       }
     });
+  }
+
+  void _showChestPainWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Chest Pain Warning',
+      message: 'The symptom like chest pain should be treated as a medical emergency, regardless of environmental factors.',
+      pauseButtonText: 'Call 119',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      // Simulate calling 119 (dummy action)
+      // You can add any action here, like showing a message or logging
+      setState(() {
+        _isPaused = true;
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
+  }
+
+  void _showDaylightWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Daylight Warning',
+      message: 'The sun is setting. Be aware of the trail conditions. If you are lost, it may be safer to stay put and call for help.',
+      pauseButtonText: 'Call 119',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      // Simulate calling 119 (dummy action)
+      setState(() {
+        _isPaused = true;
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
+  }
+
+  void _showOffTrailWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Off-Trail Warning',
+      message: 'It looks like you\'ve wandered from the main path. Let\'s get you back safely—tap to see the quickest route to the trail.',
+      pauseButtonText: 'Call 119',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      // Simulate calling 119 (dummy action)
+      setState(() {
+        _isPaused = true;
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
+  }
+
+  void _showHeavyRainWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Heavy Rain Warning',
+      message: 'Heavy rain and a possible thunderstorm are moving into your location now. Descend from high ground immediately.',
+      pauseButtonText: 'On my way!',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      // User acknowledged and is on their way
+      setState(() {
+        _isPaused = wasPaused; // Resume the hike
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
+  }
+
+  void _showNearbyAssistanceWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Nearby Assistance',
+      message: 'A hiker near you needs assistance. Tap to view details and help if you can do so safely.',
+      pauseButtonText: 'On my way!',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      // User acknowledged and is on their way to help
+      setState(() {
+        _isPaused = wasPaused; // Resume the hike
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
+  }
+
+  void _showDangerousTrailWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Dangerous Trail Warning',
+      message: 'Pay close attention to the trail ahead! It can be dangerous.',
+      pauseButtonText: 'I will be careful!',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      // User acknowledged and will be careful
+      setState(() {
+        _isPaused = wasPaused; // Resume the hike
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
+  }
+
+  void _showGKimiWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'G-KIMI Warning',
+      message: 'Heavy rain and a possible thunderstorm are moving into your location now. Descend from high ground immediately.',
+      pauseButtonText: 'On my way!',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      // User acknowledged and is on their way
+      setState(() {
+        _isPaused = wasPaused; // Resume the hike
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
+  }
+
+  void _showCliffWarning() async {
+    // Pause the timer while showing the alert
+    final wasPaused = _isPaused;
+    setState(() {
+      _isPaused = true;
+    });
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Cliff Warning',
+      message: 'Cliff edge is in front. Be careful.',
+      pauseButtonText: 'Pause',
+      cancelButtonText: 'Continue',
+    );
+
+    if (result == 'pause') {
+      // Keep the hike paused
+      setState(() {
+        _isPaused = true;
+      });
+    } else if (result == 'cancel') {
+      // Resume the hike
+      setState(() {
+        _isPaused = wasPaused; // Restore previous pause state
+      });
+    }
   }
 
   void _togglePause() {
