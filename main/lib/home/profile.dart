@@ -58,21 +58,30 @@ class ProfilePage extends StatelessWidget {
                     const Spacer(),
 
                     // Logout button
-                    Container(
-                      width: double.infinity,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF9E9E9E),
-                        borderRadius: BorderRadius.circular(26),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/welcome',
+                          (route) => false,
+                        );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF9E9E9E),
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Logout',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
