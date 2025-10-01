@@ -1,0 +1,703 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:async';
+import 'dart:math' as math;
+
+class HikeActivePage extends StatefulWidget {
+  final String trailTitle;
+  final String totalDistance;
+  final String estimatedTime;
+
+  const HikeActivePage({
+    super.key,
+    required this.trailTitle,
+    required this.totalDistance,
+    required this.estimatedTime,
+  });
+
+  @override
+  State<HikeActivePage> createState() => _HikeActivePageState();
+}
+
+class _HikeActivePageState extends State<HikeActivePage> {
+  Timer? _timer;
+  int _elapsedSeconds = 0;
+  double _progress = 0.0; // Progress from 0.0 to 1.0
+  int _heartRate = 120;
+  int _calories = 0;
+  bool _isPaused = false;
+  int _distanceToNextStop = 200;
+
+  @override
+  void initState() {
+    super.initState();
+    _startHike();
+  }
+
+  void _startHike() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!_isPaused) {
+        setState(() {
+          _elapsedSeconds++;
+
+          // Update progress: 1% every 5 seconds (0.2% per second, completes in ~8 minutes)
+          _progress = math.min(1.0, _progress + (1.0 / 500));
+
+          // Update heart rate with smooth fluctuation (gradual changes between 110-155)
+          // Use sine wave for smooth, realistic heart rate variation
+          final heartRateVariation = (math.sin(_elapsedSeconds / 10) * 20).round();
+          _heartRate = 130 + heartRateVariation;
+
+          // Update calories faster (roughly 1 calorie every 2 seconds)
+          _calories = (_elapsedSeconds / 2).round();
+
+          // Update distance to next stop (decrease by 2m per second)
+          _distanceToNextStop = math.max(0, 200 - (_elapsedSeconds * 2) % 200);
+        });
+      }
+    });
+  }
+
+  void _togglePause() {
+    setState(() {
+      _isPaused = !_isPaused;
+    });
+  }
+
+  void _endHike() {
+    _timer?.cancel();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF464646),
+        title: const Text(
+          'End Hike?',
+          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+        ),
+        content: const Text(
+          'Are you sure you want to end this hike?',
+          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Color(0xFFDCFF00)),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              Navigator.pop(context); // Go back to hike confirm page
+              Navigator.pop(context); // Go back to hike list
+            },
+            child: const Text(
+              'End',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSOS() {
+    // Navigate to SOS page or show SOS dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFFF72D2D),
+        title: const Text(
+          'SOS Emergency',
+          style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+        ),
+        content: const Text(
+          'Emergency services will be contacted with your location.',
+          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Handle SOS logic here
+            },
+            child: const Text(
+              'Send SOS',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int secs = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+
+                    // Top section with emergency button and next rest stop
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Emergency button (red circle with phone icon)
+                          GestureDetector(
+                            onTap: _showSOS,
+                            child: Container(
+                              width: 34,
+                              height: 34,
+                              decoration: const ShapeDecoration(
+                                color: Color(0xFFF72D2D),
+                                shape: OvalBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    color: Color(0xFFF72D2D),
+                                  ),
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.phone,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+
+                          // Next rest stop indicator
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: 'Next rest stop  ',
+                                  style: TextStyle(
+                                    color: Color(0xFFDCFF00),
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.71,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '$_distanceToNextStop m',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Progress bar with time and percentage
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFF464646),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  'Time',
+                                  style: TextStyle(
+                                    color: Color(0xFFA4A4A4),
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      final progressWidth = constraints.maxWidth;
+                                      final dotPosition = _progress * progressWidth;
+
+                                      return Stack(
+                                        clipBehavior: Clip.none,
+                                        alignment: Alignment.centerLeft,
+                                        children: [
+                                          // Background bar
+                                          Container(
+                                            height: 8,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFF6B6B6B),
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                          ),
+                                          // Progress bar
+                                          FractionallySizedBox(
+                                            widthFactor: _progress,
+                                            child: Container(
+                                              height: 8,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFDCFF00),
+                                                borderRadius: BorderRadius.circular(4),
+                                              ),
+                                            ),
+                                          ),
+                                          // Yellow dot indicator with percentage text
+                                          Positioned(
+                                            left: dotPosition - 14,
+                                            top: -27,
+                                            child: Column(
+                                              children: [
+                                                // Percentage text above the dot
+                                                Transform.translate(
+                                                  offset: const Offset(0, -1),
+                                                  child: Text(
+                                                    '${(_progress * 100).toInt()}%',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 17,
+                                                      fontFamily: 'Poppins',
+                                                      fontWeight: FontWeight.w700,
+                                                      height: 1.41,
+                                                    ),
+                                                  ),
+                                                ),
+                                                // Yellow circle dot
+                                                Container(
+                                                  width: 14,
+                                                  height: 14,
+                                                  decoration: const ShapeDecoration(
+                                                    color: Color(0xFFDCFF00),
+                                                    shape: OvalBorder(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  _formatTime(_elapsedSeconds),
+                                  style: const TextStyle(
+                                    color: Color(0xFFA4A4A4),
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Trail map
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Container(
+                        width: double.infinity,
+                        height: 350,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFF464646),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(37),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(37),
+                          child: ActiveTrailMapWidget(progress: _progress),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Heart rate and Calories
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                              decoration: ShapeDecoration(
+                                color: const Color(0x4CDCFF00),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    'Heart rate',
+                                    style: TextStyle(
+                                      color: Color(0xFFA4A4A4),
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '$_heartRate bpm',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                              decoration: ShapeDecoration(
+                                color: const Color(0x4CDCFF00),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    'Calories',
+                                    style: TextStyle(
+                                      color: Color(0xFFA4A4A4),
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '$_calories',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
+
+            // Bottom action buttons
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // SOS button
+                  GestureDetector(
+                    onTap: _showSOS,
+                    child: Container(
+                      width: 81,
+                      height: 81,
+                      decoration: const ShapeDecoration(
+                        color: Color(0xFFDCFF00),
+                        shape: OvalBorder(),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'SOS',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+
+                  // Pause/Play button (center, larger)
+                  GestureDetector(
+                    onTap: _togglePause,
+                    child: Container(
+                      width: 115,
+                      height: 115,
+                      decoration: const ShapeDecoration(
+                        color: Color(0xFFDCFF00),
+                        shape: OvalBorder(),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          _isPaused ? Icons.play_arrow : Icons.pause,
+                          color: Colors.black,
+                          size: 45,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+
+                  // End button
+                  GestureDetector(
+                    onTap: _endHike,
+                    child: Container(
+                      width: 81,
+                      height: 81,
+                      decoration: const ShapeDecoration(
+                        color: Color(0xFFDCFF00),
+                        shape: OvalBorder(),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'End',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Widget that combines the trail map with the SVG pin marker
+class ActiveTrailMapWidget extends StatelessWidget {
+  final double progress;
+
+  const ActiveTrailMapWidget({super.key, required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Calculate pin position based on progress
+        final points = _getTrailPoints(constraints.maxWidth, constraints.maxHeight);
+        final currentPos = _calculateCurrentPosition(points, progress);
+
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // Trail path
+            CustomPaint(
+              size: Size(constraints.maxWidth, constraints.maxHeight),
+              painter: ActiveTrailPainter(progress: progress),
+            ),
+            // SVG pin marker overlay
+            Positioned(
+              left: currentPos.dx - 20,
+              top: currentPos.dy - 45,
+              child: SvgPicture.asset(
+                'assets/icons/hike/pinmarker.svg',
+                width: 40,
+                height: 45,
+                fit: BoxFit.contain,
+                colorFilter: const ColorFilter.mode(
+                  Color(0xFFDCFF00),
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<Offset> _getTrailPoints(double width, double height) {
+    return [
+      Offset(width * 0.10, height * 0.92), // Start: bottom left
+      Offset(width * 0.25, height * 0.80), // First turn
+      Offset(width * 0.45, height * 0.75), // Horizontal stretch
+      Offset(width * 0.48, height * 0.55), // Vertical up
+      Offset(width * 0.60, height * 0.35), // Middle section
+      Offset(width * 0.80, height * 0.28), // Upper horizontal
+      Offset(width * 0.85, height * 0.15), // Near top right
+      Offset(width * 0.78, height * 0.08), // End: top right area
+    ];
+  }
+
+  Offset _calculateCurrentPosition(List<Offset> points, double progress) {
+    int completedSegments = (progress * (points.length - 1)).floor();
+    double segmentProgress = (progress * (points.length - 1)) - completedSegments;
+
+    if (completedSegments < points.length - 1) {
+      return Offset(
+        points[completedSegments].dx + (points[completedSegments + 1].dx - points[completedSegments].dx) * segmentProgress,
+        points[completedSegments].dy + (points[completedSegments + 1].dy - points[completedSegments].dy) * segmentProgress,
+      );
+    } else {
+      return points.last;
+    }
+  }
+}
+
+class ActiveTrailPainter extends CustomPainter {
+  final double progress;
+
+  ActiveTrailPainter({required this.progress});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Path points for the trail
+    final List<Offset> points = [
+      Offset(size.width * 0.10, size.height * 0.92), // Start: bottom left
+      Offset(size.width * 0.25, size.height * 0.80), // First turn
+      Offset(size.width * 0.45, size.height * 0.75), // Horizontal stretch
+      Offset(size.width * 0.48, size.height * 0.55), // Vertical up
+      Offset(size.width * 0.60, size.height * 0.35), // Middle section
+      Offset(size.width * 0.80, size.height * 0.28), // Upper horizontal
+      Offset(size.width * 0.85, size.height * 0.15), // Near top right
+      Offset(size.width * 0.78, size.height * 0.08), // End: top right area
+    ];
+
+    // Calculate progress point
+    int completedSegments = (progress * (points.length - 1)).floor();
+    double segmentProgress = (progress * (points.length - 1)) - completedSegments;
+
+    // Step 1: Draw the entire trail path as grey solid base
+    final greyBasePaint = Paint()
+      ..color = const Color(0xFF8A8A8A)
+      ..strokeWidth = 20
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    for (int i = 0; i < points.length - 1; i++) {
+      canvas.drawLine(points[i], points[i + 1], greyBasePaint);
+    }
+
+    // Step 2: Draw black dashed line on entire path (static, won't move)
+    final dashedPaint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke;
+
+    for (int i = 0; i < points.length - 1; i++) {
+      _drawDashedLine(canvas, points[i], points[i + 1], dashedPaint);
+    }
+
+    // Step 3: Draw completed path (yellow/lime solid on top, overlapping the dashed line)
+    final completedPaint = Paint()
+      ..color = const Color(0xFFDCFF00)
+      ..strokeWidth = 12
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    for (int i = 0; i < completedSegments && i < points.length - 1; i++) {
+      canvas.drawLine(points[i], points[i + 1], completedPaint);
+    }
+
+    // Draw current segment partially
+    if (completedSegments < points.length - 1) {
+      Offset currentEnd = Offset(
+        points[completedSegments].dx + (points[completedSegments + 1].dx - points[completedSegments].dx) * segmentProgress,
+        points[completedSegments].dy + (points[completedSegments + 1].dy - points[completedSegments].dy) * segmentProgress,
+      );
+      canvas.drawLine(points[completedSegments], currentEnd, completedPaint);
+    }
+
+    // Draw waypoint circles
+    final waypointPaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+
+    for (int i = 1; i < points.length - 1; i++) {
+      canvas.drawCircle(points[i], 10, waypointPaint);
+    }
+
+    // Note: Pin marker is now drawn as SVG overlay in ActiveTrailMapWidget
+  }
+
+  void _drawDashedLine(Canvas canvas, Offset start, Offset end, Paint paint) {
+    const dashWidth = 8;
+    const dashSpace = 5;
+
+    double distance = (end - start).distance;
+    double dashCount = distance / (dashWidth + dashSpace);
+
+    for (int i = 0; i < dashCount; i++) {
+      double t1 = (i * (dashWidth + dashSpace)) / distance;
+      double t2 = math.min(((i * (dashWidth + dashSpace)) + dashWidth) / distance, 1.0);
+
+      Offset p1 = Offset(
+        start.dx + (end.dx - start.dx) * t1,
+        start.dy + (end.dy - start.dy) * t1,
+      );
+      Offset p2 = Offset(
+        start.dx + (end.dx - start.dx) * t2,
+        start.dy + (end.dy - start.dy) * t2,
+      );
+
+      canvas.drawLine(p1, p2, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(ActiveTrailPainter oldDelegate) {
+    return oldDelegate.progress != progress;
+  }
+}

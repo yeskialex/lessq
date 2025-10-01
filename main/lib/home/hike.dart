@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'hike_confirm.dart';
 
 class HikePage extends StatefulWidget {
   const HikePage({super.key});
@@ -127,24 +128,63 @@ class _HikePageState extends State<HikePage> {
 
                     // Next button (appears when trail is selected)
                     if (selectedTrailIndex != null) ...[
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFDCFF00),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                      GestureDetector(
+                        onTap: () {
+                          // Get selected trail data
+                          final trails = [
+                            {
+                              'title': 'Samcheonsa Trail',
+                              'distance': '7.33 km',
+                              'time': '2 hours 40 minutes',
+                              'difficulty': 'moderate',
+                            },
+                            {
+                              'title': 'Baegundae – Ui Gugok Trail',
+                              'distance': '9.98 km',
+                              'time': '4 hours 20 minutes',
+                              'difficulty': 'advanced',
+                            },
+                            {
+                              'title': 'Baegundae – Ui Gugok Trail',
+                              'distance': '6 km',
+                              'time': '3 hours',
+                              'difficulty': 'advanced',
+                            },
+                          ];
+
+                          final selectedTrail = trails[selectedTrailIndex!];
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HikeConfirmPage(
+                                trailTitle: selectedTrail['title']!,
+                                distance: selectedTrail['distance']!,
+                                time: selectedTrail['time']!,
+                                difficulty: selectedTrail['difficulty']!,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFDCFF00),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          'Next',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            height: 1.50,
+                          child: const Text(
+                            'Next',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 1.50,
+                            ),
                           ),
                         ),
                       ),
