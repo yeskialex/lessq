@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'sign_up.dart';
-import 'home/bottom_navigation.dart';
+import 'sign_in.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -93,9 +93,9 @@ class WelcomePage extends StatelessWidget {
                       const SizedBox(height: 24),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomeBottomNavigation(currentIndex: 0)), // Go directly to hike page
+                            MaterialPageRoute(builder: (context) => const SignInPage()),
                           );
                         },
                         child: const Text(

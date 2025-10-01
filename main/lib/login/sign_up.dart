@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'setup/emergency_contact.dart';
+import '../setup/emergency_contact.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

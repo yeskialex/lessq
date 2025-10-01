@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../login/welcome.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -60,9 +61,9 @@ class ProfilePage extends StatelessWidget {
                     // Logout button
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
+                        Navigator.pushAndRemoveUntil(
                           context,
-                          '/welcome',
+                          MaterialPageRoute(builder: (context) => const WelcomePage()),
                           (route) => false,
                         );
                       },
