@@ -258,11 +258,11 @@ class _SignInPageState extends State<SignInPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildSocialButton('assets/icons/kakao_talk.png'),
+                  _buildSocialButton('assets/logo/kakaologo.png'),
                   const SizedBox(width: 16),
-                  _buildSocialButton('assets/icons/apple.png'),
+                  _buildSocialButton('assets/logo/applelogo.png'),
                   const SizedBox(width: 16),
-                  _buildSocialButton('assets/icons/google.png'),
+                  _buildSocialButton('assets/logo/googlelogo.png'),
                 ],
               ),
               const SizedBox(height: 80),
@@ -299,7 +299,7 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _buildSocialButton(String iconPath) {
     return Container(
-      width: 108,
+      width: 102,
       height: 68,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: ShapeDecoration(
@@ -313,6 +313,7 @@ class _SignInPageState extends State<SignInPage> {
           iconPath,
           width: 40,
           height: 40,
+          fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) {
             return const Icon(Icons.image, size: 40);
           },
