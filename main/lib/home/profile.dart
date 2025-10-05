@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../login/welcome.dart';
+import 'profile_awards.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -46,15 +47,22 @@ class ProfilePage extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    _buildMenuItem('Edit Profile'),
+                    _buildMenuItem(context, 'Edit Profile', null),
                     const SizedBox(height: 40),
-                    _buildMenuItem('Favorite Routes'),
+                    _buildMenuItem(context, 'Favorite Routes', null),
                     const SizedBox(height: 40),
-                    _buildMenuItem('Awards'),
+                    _buildMenuItem(context, 'Awards', () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfileAwardsPage(),
+                        ),
+                      );
+                    }),
                     const SizedBox(height: 40),
-                    _buildMenuItem('Settings'),
+                    _buildMenuItem(context, 'Settings', null),
                     const SizedBox(height: 40),
-                    _buildMenuItem('About'),
+                    _buildMenuItem(context, 'About', null),
 
                     const Spacer(),
 
@@ -99,25 +107,28 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w400,
+  Widget _buildMenuItem(BuildContext context, String title, VoidCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
-        const Icon(
-          Icons.arrow_forward,
-          color: Colors.white,
-          size: 20,
-        ),
-      ],
+          const Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+            size: 20,
+          ),
+        ],
+      ),
     );
   }
 }

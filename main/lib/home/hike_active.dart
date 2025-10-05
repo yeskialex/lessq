@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:main/services/native_alert_service.dart';
+import 'hike_finished.dart';
 
 class HikeActivePage extends StatefulWidget {
   final String trailTitle;
@@ -36,6 +37,7 @@ class _HikeActivePageState extends State<HikeActivePage> {
   bool _hasShownNearbyAssistanceWarning = false;
   bool _hasShownDangerousTrailWarning = false;
   bool _hasShownGKimiWarning = false;
+  bool _hasShownCompletionPopup = false;
 
   @override
   void initState() {
@@ -109,6 +111,13 @@ class _HikeActivePageState extends State<HikeActivePage> {
           if (_progress >= 0.33 && !_hasShownGKimiWarning) {
             _hasShownGKimiWarning = true;
             _showGKimiWarning();
+          }
+
+          // Trigger completion popup at 100% progress
+          if (_progress >= 1.0 && !_hasShownCompletionPopup) {
+            _hasShownCompletionPopup = true;
+            _timer?.cancel();
+            _showCompletionPopup();
           }
         });
       }
@@ -363,8 +372,13 @@ class _HikeActivePageState extends State<HikeActivePage> {
           TextButton(
             onPressed: () {
               Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Go back to hike confirm page
-              Navigator.pop(context); // Go back to hike list
+              // Navigate to finished page, replacing the hike active page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HikeFinishedPage(),
+                ),
+              );
             },
             child: const Text(
               'End',
@@ -409,6 +423,15 @@ class _HikeActivePageState extends State<HikeActivePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showCompletionPopup() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HikeFinishedPage(),
       ),
     );
   }
@@ -725,14 +748,14 @@ class _HikeActivePageState extends State<HikeActivePage> {
                       width: 81,
                       height: 81,
                       decoration: const ShapeDecoration(
-                        color: Color(0xFFDCFF00),
+                        color: Color(0xFFF72D2D),
                         shape: OvalBorder(),
                       ),
                       child: const Center(
                         child: Text(
                           'SOS',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 15,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
