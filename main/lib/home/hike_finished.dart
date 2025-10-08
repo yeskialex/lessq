@@ -196,8 +196,10 @@ class HikeFinishedPage extends StatelessWidget {
         if (!isSelected) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => HomeBottomNavigation(currentIndex: index),
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => HomeBottomNavigation(currentIndex: index),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
             ),
           );
         }
