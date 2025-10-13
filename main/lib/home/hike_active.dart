@@ -51,8 +51,8 @@ class _HikeActivePageState extends State<HikeActivePage> {
         setState(() {
           _elapsedSeconds++;
 
-          // Update progress: 1% every 5 seconds (0.2% per second, completes in ~8 minutes)
-          _progress = math.min(1.0, _progress + (1.0 / 500));
+          // Update progress: faster rate (completes in ~2 minutes)
+          _progress = math.min(1.0, _progress + (1.0 / 120));
 
           // Update heart rate with smooth fluctuation (gradual changes between 110-155)
           // Use sine wave for smooth, realistic heart rate variation

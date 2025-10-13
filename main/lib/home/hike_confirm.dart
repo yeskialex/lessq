@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'hike_active.dart';
+import 'bottom_navigation.dart';
 
 class HikeConfirmPage extends StatelessWidget {
   final String trailTitle;
@@ -173,29 +174,45 @@ class HikeConfirmPage extends StatelessWidget {
   Widget _buildNavItem(BuildContext context, int index, String label, IconData icon) {
     final bool isSelected = index == 0; // Hike is selected on this page
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
-            size: 20,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
-              fontSize: 10,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
+    return GestureDetector(
+      onTap: () {
+        if (!isSelected) {
+          // Navigate to the respective page without animation
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                HomeBottomNavigation(currentIndex: index),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          );
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
+              size: 20,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
+                fontSize: 10,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
