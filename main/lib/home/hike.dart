@@ -11,10 +11,17 @@ class HikePage extends StatefulWidget {
 
 class _HikePageState extends State<HikePage> {
   int? selectedTrailIndex;
+  bool isFilterMenuOpen = false;
 
   void selectTrail(int index) {
     setState(() {
       selectedTrailIndex = index;
+    });
+  }
+
+  void toggleFilterMenu() {
+    setState(() {
+      isFilterMenuOpen = !isFilterMenuOpen;
     });
   }
 
@@ -31,6 +38,7 @@ class _HikePageState extends State<HikePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Seoul location button
                     Container(
@@ -63,16 +71,87 @@ class _HikePageState extends State<HikePage> {
                         ],
                       ),
                     ),
-                    // Hamburger menu button
-                    SizedBox(
-                      width: 35,
-                      height: 36,
-                      child: Center(
-                        child: SvgPicture.asset(
-                          'assets/icons/hamburger.svg',
-                          width: 20,
-                          height: 20,
-                        ),
+                    // Hamburger menu button or Filter options
+                    GestureDetector(
+                      onTap: toggleFilterMenu,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: isFilterMenuOpen
+                            ? Container(
+                                key: const ValueKey('filter_menu'),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                decoration: ShapeDecoration(
+                                  color: const Color(0xFFDCFF00),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(21),
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 16,
+                                          height: 16,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.black, width: 2),
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          'By Name',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 16,
+                                          height: 16,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.black, width: 2),
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          'By Difficulty',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : SizedBox(
+                                key: const ValueKey('hamburger'),
+                                width: 35,
+                                height: 36,
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    'assets/icons/hamburger.svg',
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                   ],
