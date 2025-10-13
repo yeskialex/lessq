@@ -15,25 +15,6 @@ class HikeFinishedPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              // Back button
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeBottomNavigation(currentIndex: 0),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 38),
                 child: Text(
@@ -48,7 +29,7 @@ class HikeFinishedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Container(
                 width: double.infinity,
                 decoration: const ShapeDecoration(
@@ -62,7 +43,7 @@ class HikeFinishedPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(height: 73),
+                    const SizedBox(height: 40),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 33),
                       child: Text(
@@ -77,7 +58,7 @@ class HikeFinishedPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 20),
                     Text(
                       'July 8th 2025',
                       textAlign: TextAlign.center,
@@ -88,14 +69,14 @@ class HikeFinishedPage extends StatelessWidget {
                         fontWeight: FontWeight.w300,
                       ),
                     ),
-                    const SizedBox(height: 31),
+                    const SizedBox(height: 20),
                     Image.asset(
                       'assets/images/trophy.png',
-                      width: 279,
-                      height: 315,
+                      width: 250,
+                      height: 280,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(height: 42),
+                    const SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -162,7 +143,7 @@ class HikeFinishedPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 120),
+                    const SizedBox(height: 100), // Space for bottom navigation
                   ],
                 ),
               ),

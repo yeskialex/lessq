@@ -126,6 +126,13 @@ class _ContactsPageState extends State<ContactsPage> {
                         height: 1.71,
                       ),
                     ),
+                    const Spacer(),
+                    const Icon(
+                      Icons.phone,
+                      color: Color(0xFFF72D2D),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 17),
                   ],
                 ),
               ),

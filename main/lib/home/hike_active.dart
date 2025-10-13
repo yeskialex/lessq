@@ -347,47 +347,30 @@ class _HikeActivePageState extends State<HikeActivePage> {
     });
   }
 
-  void _endHike() {
+  void _endHike() async {
     _timer?.cancel();
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF464646),
-        title: const Text(
-          'End Hike?',
-          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-        ),
-        content: const Text(
-          'Are you sure you want to end this hike?',
-          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Color(0xFFDCFF00)),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Close dialog
-              // Navigate to finished page, replacing the hike active page
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HikeFinishedPage(),
-                ),
-              );
-            },
-            child: const Text(
-              'End',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'End Hike?',
+      message: 'Are you sure you want to end this hike?',
+      pauseButtonText: 'End',
+      cancelButtonText: 'Cancel',
     );
+
+    if (result == 'pause') {
+      // User confirmed ending the hike
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HikeFinishedPage(),
+          ),
+        );
+      }
+    } else if (result == 'cancel') {
+      // User cancelled, resume the timer
+      _startHike();
+    }
   }
 
   void _showSOS() {

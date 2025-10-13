@@ -24,4 +24,27 @@ class NativeAlertService {
       return null;
     }
   }
+
+  /// Shows a native iOS action sheet with multiple buttons
+  /// Returns the index of the button pressed as a string ('0', '1', '2', etc.)
+  /// or 'cancel' if the cancel button was pressed
+  static Future<String?> showActionSheet({
+    required String title,
+    required String message,
+    required List<String> buttons,
+    String cancelButtonText = 'Cancel',
+  }) async {
+    try {
+      final String? result = await _channel.invokeMethod('showActionSheet', {
+        'title': title,
+        'message': message,
+        'buttons': buttons,
+        'cancelButton': cancelButtonText,
+      });
+      return result;
+    } on PlatformException catch (e) {
+      print('Failed to show native action sheet: ${e.message}');
+      return null;
+    }
+  }
 }

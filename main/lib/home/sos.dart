@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'sos_clicked.dart';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -15,11 +16,12 @@ class _SosPageState extends State<SosPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               const SizedBox(height: 24),
 
               // Header with greeting and notification
@@ -75,7 +77,7 @@ class _SosPageState extends State<SosPage> {
                 ],
               ),
 
-              const Spacer(),
+              const SizedBox(height: 120),
 
               // Help text
               Padding(
@@ -155,7 +157,13 @@ class _SosPageState extends State<SosPage> {
                     // Inner SOS button
                     GestureDetector(
                       onTap: () {
-                        // SOS button action
+                        // Navigate to SOS clicked page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SosClickedPage(),
+                          ),
+                        );
                       },
                       child: Container(
                         width: 241,
@@ -182,7 +190,7 @@ class _SosPageState extends State<SosPage> {
                 ),
               ),
 
-              const Spacer(),
+              const SizedBox(height: 40),
 
               // Pre-defined message toggle
               GestureDetector(
@@ -250,7 +258,8 @@ class _SosPageState extends State<SosPage> {
               ),
 
               const SizedBox(height: 100), // Space for bottom navigation
-            ],
+              ],
+            ),
           ),
         ),
       ),

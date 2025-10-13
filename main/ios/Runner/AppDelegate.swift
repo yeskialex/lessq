@@ -19,6 +19,8 @@ import UIKit
     nativeAlertChannel.setMethodCallHandler { [weak self] (call, result) in
       if call.method == "showAlert" {
         self?.showNativeAlert(call: call, result: result, controller: controller)
+      } else if call.method == "showActionSheet" {
+        self?.showNativeActionSheet(call: call, result: result, controller: controller)
       } else {
         result(FlutterMethodNotImplemented)
       }
@@ -51,6 +53,39 @@ import UIKit
     }
 
     alert.addAction(pauseAction)
+    alert.addAction(cancelAction)
+
+    // Present on main thread
+    DispatchQueue.main.async {
+      controller.present(alert, animated: true, completion: nil)
+    }
+  }
+
+  private func showNativeActionSheet(call: FlutterMethodCall, result: @escaping FlutterResult, controller: UIViewController) {
+    guard let args = call.arguments as? [String: Any],
+          let title = args["title"] as? String,
+          let message = args["message"] as? String,
+          let buttons = args["buttons"] as? [String],
+          let cancelButton = args["cancelButton"] as? String else {
+      result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing required arguments", details: nil))
+      return
+    }
+
+    // Create native iOS action sheet
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+
+    // Add action buttons
+    for (index, buttonTitle) in buttons.enumerated() {
+      let action = UIAlertAction(title: buttonTitle, style: .default) { _ in
+        result(String(index))
+      }
+      alert.addAction(action)
+    }
+
+    // Add cancel button
+    let cancelAction = UIAlertAction(title: cancelButton, style: .cancel) { _ in
+      result("cancel")
+    }
     alert.addAction(cancelAction)
 
     // Present on main thread
