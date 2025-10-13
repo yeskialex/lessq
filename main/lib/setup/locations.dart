@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../home/bottom_navigation.dart';
+import 'welcome.dart';
 
 class LocationsPage extends StatefulWidget {
   const LocationsPage({super.key});
@@ -25,18 +25,18 @@ class _LocationsPageState extends State<LocationsPage> {
 
       if (!mounted) return;
 
-      // Navigate to home page (starting with hike page)
+      // Navigate to welcome page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeBottomNavigation(currentIndex: 0)), // Start with hike page
+        MaterialPageRoute(builder: (context) => const WelcomePage()),
       );
     } catch (e) {
       debugPrint('Error requesting location permission: $e');
       if (mounted) {
-        // Navigate to home page even if there's an error
+        // Navigate to welcome page even if there's an error
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeBottomNavigation(currentIndex: 0)),
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
         );
       }
     }
@@ -117,7 +117,7 @@ class _LocationsPageState extends State<LocationsPage> {
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeBottomNavigation(currentIndex: 0)),
+                    MaterialPageRoute(builder: (context) => const WelcomePage()),
                   );
                 },
                 child: Text(

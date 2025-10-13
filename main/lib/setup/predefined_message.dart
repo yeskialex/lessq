@@ -103,22 +103,23 @@ class _PredefinedMessagePageState extends State<PredefinedMessagePage> {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                    decoration: ShapeDecoration(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(width: 0.5, color: Colors.white),
-                        borderRadius: BorderRadius.circular(16),
+                  GestureDetector(
+                    onTap: _fillPredefinedMessage,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      decoration: ShapeDecoration(
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(width: 0.5, color: Colors.white),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
-                    ),
-                    child: GestureDetector(
-                      onTap: _fillPredefinedMessage,
                       child: TextField(
                         controller: _messageController,
                         maxLines: 5,
                         readOnly: true,
+                        enabled: false,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
