@@ -108,9 +108,9 @@ class _HikePageState extends State<HikePage> {
                     _buildTrailCard(
                       index: 1,
                       title: 'Baegundae – Ui Gugok Trail',
-                      distance: '9.98 km',
-                      time: '4 hours 20 minutes',
-                      difficulty: 'advanced',
+                      distance: '5.1 km',
+                      time: '2 hours 10 minutes',
+                      difficulty: 'moderate',
                     ),
 
                     const SizedBox(height: 20),
@@ -118,10 +118,32 @@ class _HikePageState extends State<HikePage> {
                     // Trail 3
                     _buildTrailCard(
                       index: 2,
-                      title: 'Baegundae – Ui Gugok Trail',
-                      distance: '6 km',
-                      time: '3 hours',
+                      title: 'Cheonwangbong Peak Trail (Jirisan)',
+                      distance: '10.4 km',
+                      time: '5 hours 20 minutes',
                       difficulty: 'advanced',
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Trail 4
+                    _buildTrailCard(
+                      index: 3,
+                      title: 'Hallasan Seongpanak Trail (Jeju island)',
+                      distance: '9.6 km',
+                      time: '4 hours 30 minutes',
+                      difficulty: 'advanced',
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Trail 5
+                    _buildTrailCard(
+                      index: 4,
+                      title: 'Namsan Circular Trail (Seoul)',
+                      distance: '7.2 km',
+                      time: '2 hours',
+                      difficulty: 'easy',
                     ),
 
                     const SizedBox(height: 20),
@@ -140,15 +162,27 @@ class _HikePageState extends State<HikePage> {
                             },
                             {
                               'title': 'Baegundae – Ui Gugok Trail',
-                              'distance': '9.98 km',
-                              'time': '4 hours 20 minutes',
+                              'distance': '5.1 km',
+                              'time': '2 hours 10 minutes',
+                              'difficulty': 'moderate',
+                            },
+                            {
+                              'title': 'Cheonwangbong Peak Trail (Jirisan)',
+                              'distance': '10.4 km',
+                              'time': '5 hours 20 minutes',
                               'difficulty': 'advanced',
                             },
                             {
-                              'title': 'Baegundae – Ui Gugok Trail',
-                              'distance': '6 km',
-                              'time': '3 hours',
+                              'title': 'Hallasan Seongpanak Trail (Jeju island)',
+                              'distance': '9.6 km',
+                              'time': '4 hours 30 minutes',
                               'difficulty': 'advanced',
+                            },
+                            {
+                              'title': 'Namsan Circular Trail (Seoul)',
+                              'distance': '7.2 km',
+                              'time': '2 hours',
+                              'difficulty': 'easy',
                             },
                           ];
 
