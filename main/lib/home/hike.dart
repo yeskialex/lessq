@@ -63,19 +63,13 @@ class _HikePageState extends State<HikePage> {
                         ],
                       ),
                     ),
-                    // Search location button
-                    Container(
+                    // Hamburger menu button
+                    SizedBox(
                       width: 35,
                       height: 36,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFDCFF00),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(21),
-                        ),
-                      ),
                       child: Center(
                         child: SvgPicture.asset(
-                          'assets/icons/hike/Search_Location.svg',
+                          'assets/icons/hamburger.svg',
                           width: 20,
                           height: 20,
                         ),

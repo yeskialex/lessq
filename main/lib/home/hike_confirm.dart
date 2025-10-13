@@ -25,65 +25,65 @@ class HikeConfirmPage extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 20),
 
-                    // Greeting text
-                    const Text(
-                      'Kim Ha-Joon,\nare you ready to start the hike?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        height: 1.41,
+                          // Greeting text
+                          const Text(
+                            'Kim Ha-Joon,\nare you ready to start the hike?',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              height: 1.41,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Large title
+                          const Text(
+                            'Let\'s start the hike!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xFFDCFF00),
+                              fontSize: 34,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              height: 1.32,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 20),
 
-                    // Large title
-                    const Text(
-                      'Let\'s start the hike!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFFDCFF00),
-                        fontSize: 34,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        height: 1.32,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Trail map
-                    Container(
+                    // Trail map (full width, no padding)
+                    SizedBox(
                       width: double.infinity,
                       height: 464,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFF464646),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(37),
-                        ),
-                      ),
-                        child: Stack(
-                          children: [
-                            // Trail map SVG
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(37),
-                              child: SvgPicture.asset(
-                                'assets/images/map.svg',
-                                width: double.infinity,
-                                height: 464,
-                                fit: BoxFit.cover,
-                              ),
+                      child: Stack(
+                        children: [
+                          // Trail map SVG
+                          Center(
+                            child: SvgPicture.asset(
+                              'assets/images/map.svg',
+                              width: double.infinity,
+                              height: 464,
+                              fit: BoxFit.contain,
                             ),
+                          ),
 
                             // Download button (bottom right)
                             Positioned(
-                              right: 16,
+                              right: 32,
                               bottom: 16,
                               child: Container(
                                 width: 46,
@@ -149,6 +149,53 @@ class HikeConfirmPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: Container(
+        height: 88,
+        decoration: const BoxDecoration(
+          color: Colors.black,
+        ),
+        child: SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(child: _buildNavItem(context, 0, 'Hike', Icons.hiking)),
+              Expanded(child: _buildNavItem(context, 1, 'SOS', Icons.emergency)),
+              Expanded(child: _buildNavItem(context, 2, 'Contacts', Icons.contacts)),
+              Expanded(child: _buildNavItem(context, 3, 'Profile', Icons.person)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(BuildContext context, int index, String label, IconData icon) {
+    final bool isSelected = index == 0; // Hike is selected on this page
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
+            size: 20,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
+              fontSize: 10,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
