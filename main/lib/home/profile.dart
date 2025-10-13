@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../login/welcome.dart';
+import '../login/sign_in.dart';
 import 'profile_awards.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -71,7 +71,7 @@ class ProfilePage extends StatelessWidget {
                       onTap: () {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => const WelcomePage()),
+                          MaterialPageRoute(builder: (context) => const SignInPage()),
                           (route) => false,
                         );
                       },

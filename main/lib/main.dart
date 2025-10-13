@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login/welcome.dart';
+import 'login/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         fontFamily: 'Poppins',
       ),
-      home: const WelcomePage(),
+      home: const SplashPage(),
     );
   }
 }
