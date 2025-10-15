@@ -9,38 +9,41 @@ class ProfileAwardsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
-        child: Container(
-          width: 408,
-          height: 1210,
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(color: Colors.black),
-          child: Stack(
-            children: [
+        child: Center(
+          child: Container(
+            width: 408,
+            height: 1210,
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(color: Colors.black),
+            child: Stack(
+              children: [
               Positioned(
                 left: 24,
                 top: 74,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ),
+              const Positioned(
+                left: 0,
+                right: 0,
+                top: 74,
+                child: Center(
+                  child: Text(
+                    'Awards',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      height: 1.17,
                     ),
-                    const SizedBox(width: 16),
-                    const Text(
-                      'Awards',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        height: 1.17,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
               Positioned(
@@ -496,6 +499,7 @@ class ProfileAwardsPage extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
       bottomNavigationBar: Container(

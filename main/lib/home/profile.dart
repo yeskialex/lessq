@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../login/sign_in.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'profile_awards.dart';
+import 'profile_detail.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -10,125 +11,313 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              const SizedBox(height: 24),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
 
-              // Header with Profile title and name
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Profile',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Text(
-                    'Kim Ha-Joon',
-                    style: TextStyle(
-                      color: Color(0xFFDCFF00),
-                      fontSize: 24,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 60),
-
-              // Menu items
-              Expanded(
-                child: Column(
+                // Header with title and settings icon
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildMenuItem(context, 'Edit Profile', null),
-                    const SizedBox(height: 40),
-                    _buildMenuItem(context, 'Favorite Routes', null),
-                    const SizedBox(height: 40),
-                    _buildMenuItem(context, 'Awards', () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProfileAwardsPage(),
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 40),
-                    _buildMenuItem(context, 'Settings', null),
-                    const SizedBox(height: 40),
-                    _buildMenuItem(context, 'About', null),
+                    const Text(
+                      'My Profile',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.settings, color: Colors.white, size: 28),
+                      onPressed: () {},
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
 
-                    const Spacer(),
+                const SizedBox(height: 30),
 
-                    // Logout button
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SignInPage()),
-                          (route) => false,
-                        );
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF9E9E9E),
-                          borderRadius: BorderRadius.circular(26),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Logout',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
+                // Profile section (tappable)
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileDetailPage(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E1E1E),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        // Profile picture with green border
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFDCFF00),
+                              width: 3,
+                            ),
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/face.png'),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                        const SizedBox(width: 16),
 
-                    const SizedBox(height: 100), // Space for bottom navigation
+                        // Name
+                        const Expanded(
+                          child: Text(
+                            'Kim Ha-Joon',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+
+                        // Arrow
+                        const Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.grey,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Stats grid (2x2)
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildStatCard('Age', '45'),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatCard('Blood Type', 'A'),
+                    ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildStatCard('Diseases', 'None'),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatCard('Weight', '82kg'),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 32),
+
+                // Favorite Routes section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Favorite Routes',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to all routes
+                      },
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Routes placeholders (3 images) - scrollable horizontally
+                SizedBox(
+                  height: 140,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _buildRoutePlaceholder('assets/images/route1.svg'),
+                      const SizedBox(width: 12),
+                      _buildRoutePlaceholder('assets/images/route2.svg'),
+                      const SizedBox(width: 12),
+                      _buildRoutePlaceholder(null),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                // Awards section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Awards',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileAwardsPage(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Awards placeholders (3 images) - scrollable horizontally
+                SizedBox(
+                  height: 140,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _buildAwardPlaceholder('assets/images/award1.png'),
+                      const SizedBox(width: 12),
+                      _buildAwardPlaceholder('assets/images/trophy.png'),
+                      const SizedBox(width: 12),
+                      _buildAwardPlaceholder('assets/images/trophy.png'),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildMenuItem(BuildContext context, String title, VoidCallback? onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildStatCard(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            label,
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
+              color: Colors.grey,
+              fontSize: 12,
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
             ),
           ),
-          const Icon(
-            Icons.arrow_forward,
-            color: Colors.white,
-            size: 20,
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Color(0xFFDCFF00),
+              fontSize: 18,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRoutePlaceholder(String? imagePath) {
+    return Container(
+      width: 130,
+      height: 130,
+      decoration: BoxDecoration(
+        color: const Color(0xFF2A2A2A),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: imagePath != null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Opacity(
+                opacity: 1.0,
+                child: SvgPicture.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            )
+          : const Center(
+              child: Icon(
+                Icons.route,
+                color: Color(0xFFDCFF00),
+                size: 50,
+              ),
+            ),
+    );
+  }
+
+  Widget _buildAwardPlaceholder(String? imagePath) {
+    return Container(
+      width: 130,
+      height: 130,
+      decoration: BoxDecoration(
+        color: const Color(0xFF2A2A2A),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: imagePath != null
+          ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.contain,
+              ),
+            )
+          : const Center(
+              child: Icon(
+                Icons.emoji_events,
+                color: Color(0xFFDCFF00),
+                size: 50,
+              ),
+            ),
     );
   }
 }
