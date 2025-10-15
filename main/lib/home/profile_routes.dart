@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'bottom_navigation.dart';
 
-class ProfileAwardsPage extends StatelessWidget {
-  const ProfileAwardsPage({super.key});
+class ProfileRoutesPage extends StatelessWidget {
+  const ProfileRoutesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +31,12 @@ class ProfileAwardsPage extends StatelessWidget {
                   ),
                   const Center(
                     child: Text(
-                      'Awards',
+                      'Favorite Routes',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 20,
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -43,25 +44,37 @@ class ProfileAwardsPage extends StatelessWidget {
               ),
             ),
 
-            // Scrollable grid
+            // Scrollable content
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
 
-                    // Grid of awards
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
+                    // Route 1
+                    _buildRouteCard(
+                      'Samcheonsa Trail',
+                      'assets/images/route1.svg',
+                      'You reported an accident. Please confirm your status. Only select "Urgent Help Needed" if immediate assistance is critical.',
+                    ),
+                    const SizedBox(height: 32),
 
+                    // Route 2
+                    _buildRouteCard(
+                      'Baegundae - Ui Gugok Trail',
+                      'assets/images/route2.svg',
+                      null,
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Route 3
+                    _buildRouteCard(
+                      'Samcheonsa Trail',
+                      'assets/images/route1.svg',
+                      null,
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -90,63 +103,58 @@ class ProfileAwardsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAwardRow(String leftLabel, String rightLabel) {
-    return Row(
+  Widget _buildRouteCard(String title, String svgPath, String? warningText) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _buildAwardCard(leftLabel, 'assets/images/trophy.png'),
+        // Title
+        Text(
+          title,
+          style: const TextStyle(
+            color: Color(0xFFDCFF00),
+            fontSize: 16,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _buildAwardCard(rightLabel, 'assets/images/award1.png'),
-        ),
-      ],
-    );
-  }
+        const SizedBox(height: 8),
 
-  Widget _buildAwardCard(String label, String imagePath) {
-    return Container(
-      height: 160,
-      decoration: BoxDecoration(
-        color: const Color(0x8EC6E500),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 16),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.contain,
-              ),
+        // Map container
+        Container(
+          width: double.infinity,
+          height: 180,
+          decoration: BoxDecoration(
+            color: const Color(0xFF2A2A2A),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: const Color(0xFFDCFF00),
+              width: 2,
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0x8EC6E500),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: SvgPicture.asset(
+              svgPath,
+              fit: BoxFit.cover,
             ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w700,
-              ),
+          ),
+        ),
+
+        // Warning text if provided
+        if (warningText != null) ...[
+          const SizedBox(height: 12),
+          Text(
+            warningText,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              height: 1.5,
             ),
           ),
         ],
-      ),
+      ],
     );
   }
 
@@ -170,14 +178,14 @@ class ProfileAwardsPage extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isSelected ? const Color(0x8EC6E500) : Colors.grey,
+              color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
               size: 20,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? const Color(0x8EC6E500) : Colors.grey,
+                color: isSelected ? const Color(0xFFDCFF00) : Colors.grey,
                 fontSize: 10,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,

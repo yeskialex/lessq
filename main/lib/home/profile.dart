@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'profile_awards.dart';
 import 'profile_detail.dart';
+import 'profile_routes.dart';
+import 'profile_settings.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -34,7 +36,14 @@ class ProfilePage extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.settings, color: Colors.white, size: 28),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileSettingsPage(),
+                          ),
+                        );
+                      },
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
@@ -147,7 +156,12 @@ class ProfilePage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Navigate to all routes
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileRoutesPage(),
+                          ),
+                        );
                       },
                       child: const Icon(
                         Icons.arrow_forward_ios,
@@ -223,7 +237,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
               ],
             ),
           ),

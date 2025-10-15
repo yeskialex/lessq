@@ -23,7 +23,7 @@ class HikeSummaryPage extends StatelessWidget {
               children: [
                 // Back button
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(left: 16.0, top: 16.0),
                   child: Row(
                     children: [
                       GestureDetector(
@@ -44,8 +44,6 @@ class HikeSummaryPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
-
                 // Profile section
                 Stack(
                   alignment: Alignment.center,
@@ -79,7 +77,7 @@ class HikeSummaryPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 8),
 
                 // Name
                 Text(
@@ -93,7 +91,7 @@ class HikeSummaryPage extends StatelessWidget {
                     height: 1.41,
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
 
                 // Stats grid
                 Padding(
@@ -126,7 +124,7 @@ class HikeSummaryPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
 
                 // Trail map
                 Padding(
@@ -268,7 +266,7 @@ class HikeSummaryPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 20),
               ],
             ),
           ),

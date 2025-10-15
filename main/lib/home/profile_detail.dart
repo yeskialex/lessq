@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'bottom_navigation.dart';
+import 'profile_edit.dart';
 
 class ProfileDetailPage extends StatelessWidget {
   const ProfileDetailPage({super.key});
@@ -28,15 +29,25 @@ class ProfileDetailPage extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
-                    const Text(
-                      'Edit',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.white,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileEditPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Edit',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -124,7 +135,7 @@ class ProfileDetailPage extends StatelessWidget {
                 // Address (full width)
                 _buildInfoCard('Address', '217, Teheran-ro, Gangnam-gu'),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
               ],
             ),
           ),
