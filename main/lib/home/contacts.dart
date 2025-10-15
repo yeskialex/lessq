@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'calling_amy.dart';
+import 'calling_emergency.dart';
 
 class ContactsPage extends StatefulWidget {
   const ContactsPage({super.key});
@@ -81,59 +83,70 @@ class _ContactsPageState extends State<ContactsPage> {
               const SizedBox(height: 16),
 
               // Emergency number (119)
-              Container(
-                width: double.infinity,
-                height: 52,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 1,
-                      color: Color(0xFFF72D2D),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to calling page with black background
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CallingEmergencyPage(),
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 52,
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                        width: 1,
+                        color: Color(0xFFF72D2D),
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                ),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 17),
-                    Container(
-                      width: 34,
-                      height: 34,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFF464646),
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            width: 1,
-                            color: Color(0xFFF72D2D),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 17),
+                      Container(
+                        width: 34,
+                        height: 34,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFF464646),
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 1,
+                              color: Color(0xFFF72D2D),
+                            ),
+                            borderRadius: BorderRadius.circular(17),
                           ),
-                          borderRadius: BorderRadius.circular(17),
+                        ),
+                        child: const Icon(
+                          Icons.local_hospital,
+                          color: Color(0xFFF72D2D),
+                          size: 20,
                         ),
                       ),
-                      child: const Icon(
-                        Icons.local_hospital,
+                      const SizedBox(width: 19),
+                      const Text(
+                        '119',
+                        style: TextStyle(
+                          color: Color(0xFFF72D2D),
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          height: 1.71,
+                        ),
+                      ),
+                      const Spacer(),
+                      const Icon(
+                        Icons.phone,
                         color: Color(0xFFF72D2D),
                         size: 20,
                       ),
-                    ),
-                    const SizedBox(width: 19),
-                    const Text(
-                      '119',
-                      style: TextStyle(
-                        color: Color(0xFFF72D2D),
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        height: 1.71,
-                      ),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.phone,
-                      color: Color(0xFFF72D2D),
-                      size: 20,
-                    ),
-                    const SizedBox(width: 17),
-                  ],
+                      const SizedBox(width: 17),
+                    ],
+                  ),
                 ),
               ),
 
@@ -158,57 +171,90 @@ class _ContactsPageState extends State<ContactsPage> {
                 child: ListView.builder(
                   itemCount: emergencyContacts.length,
                   itemBuilder: (context, index) {
+                    String contactName = emergencyContacts[index];
+                    String contactImage = contactName == 'Amy Adams'
+                        ? 'assets/images/amy.png'
+                        : 'assets/images/john.png';
+                    String avatarImage = contactName == 'Amy Adams'
+                        ? 'assets/images/amyavatar.png'
+                        : 'assets/images/johnavatar2.png';
+
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child: Container(
-                        width: double.infinity,
-                        height: 52,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFDCFF00),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigate to calling page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CallingAmyPage(
+                                contactName: contactName,
+                                contactImage: contactImage,
+                                avatarImage: avatarImage,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 52,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFDCFF00),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 17),
-                            Container(
-                              width: 34,
-                              height: 34,
-                              decoration: const ShapeDecoration(
-                                color: Colors.black,
-                                shape: OvalBorder(),
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 17),
+                              Container(
+                                width: 34,
+                                height: 34,
+                                decoration: const ShapeDecoration(
+                                  color: Colors.black,
+                                  shape: OvalBorder(),
+                                ),
+                                child: const Icon(
+                                  Icons.person,
+                                  color: Color(0xFFDCFF00),
+                                  size: 20,
+                                ),
                               ),
-                              child: const Icon(
-                                Icons.person,
-                                color: Color(0xFFDCFF00),
-                                size: 20,
+                              const SizedBox(width: 19),
+                              Text(
+                                contactName,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.71,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 19),
-                            Text(
-                              emergencyContacts[index],
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 1.71,
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () {
+                                  // Navigate to calling page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CallingAmyPage(
+                                        contactName: contactName,
+                                        contactImage: contactImage,
+                                        avatarImage: avatarImage,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.phone,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
                               ),
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () {
-                                // Call functionality
-                              },
-                              icon: const Icon(
-                                Icons.phone,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                          ],
+                              const SizedBox(width: 8),
+                            ],
+                          ),
                         ),
                       ),
                     );
