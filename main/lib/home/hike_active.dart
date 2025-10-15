@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:main/home/calling_emergency.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:main/services/native_alert_service.dart';
@@ -373,41 +374,64 @@ class _HikeActivePageState extends State<HikeActivePage> {
     }
   }
 
-  void _showSOS() {
-    // Navigate to SOS page or show SOS dialog
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFFF72D2D),
-        title: const Text(
-          'SOS Emergency',
-          style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontWeight: FontWeight.w700),
-        ),
-        content: const Text(
-          'Emergency services will be contacted with your location.',
-          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Handle SOS logic here
-            },
-            child: const Text(
-              'Send SOS',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
-          ),
-        ],
-      ),
+  void _showSOS() async{
+    _timer?.cancel();
+
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'SOS Emergency',
+      message: 'Emergency services will be contacted with your location.',
+      pauseButtonText: 'Send SOS',
+      cancelButtonText: 'Cancel',
     );
+
+    if (result == 'pause') {
+      // User confirmed ending the hike
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CallingEmergencyPage(),
+          ),
+        );
+      }
+    } else if (result == 'cancel') {
+      // User cancelled, resume the timer
+      _startHike();
+    }
+    // // Navigate to SOS page or show SOS dialog
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => AlertDialog(
+    //     backgroundColor: const Color(0xFFF72D2D),
+    //     title: const Text(
+    //       'SOS Emergency',
+    //       style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+    //     ),
+    //     content: const Text(
+    //       'Emergency services will be contacted with your location.',
+    //       style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+    //     ),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () => Navigator.pop(context),
+    //         child: const Text(
+    //           'Cancel',
+    //           style: TextStyle(color: Colors.white),
+    //         ),
+    //       ),
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.pop(context);
+    //           // Handle SOS logic here
+    //         },
+    //         child: const Text(
+    //           'Send SOS',
+    //           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   void _showCompletionPopup() {
@@ -457,17 +481,17 @@ class _HikeActivePageState extends State<HikeActivePage> {
                               width: 34,
                               height: 34,
                               decoration: const ShapeDecoration(
-                                color: Color(0xFFF72D2D),
+                                color: Color.fromARGB(255, 0, 0, 0),
                                 shape: OvalBorder(
                                   side: BorderSide(
                                     width: 1,
-                                    color: Color(0xFFF72D2D),
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                   ),
                                 ),
                               ),
                               child: const Icon(
                                 Icons.phone,
-                                color: Colors.white,
+                                color: Color.fromARGB(255, 0, 0, 0),
                                 size: 16,
                               ),
                             ),

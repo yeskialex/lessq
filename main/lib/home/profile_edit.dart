@@ -59,7 +59,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 0),
 
               // Profile picture with green background
               Container(

@@ -15,7 +15,7 @@ class ProfileDetailPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
 
                 // Header with back button and Edit text
                 Row(
@@ -53,7 +53,7 @@ class ProfileDetailPage extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 10),
 
                 // Profile picture with green background
                 Container(

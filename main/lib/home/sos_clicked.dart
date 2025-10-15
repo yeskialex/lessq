@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/home/calling_emergency.dart';
 import '../services/native_alert_service.dart';
 import 'bottom_navigation.dart';
 
@@ -37,7 +38,7 @@ class _SosClickedPageState extends State<SosClickedPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeBottomNavigation(currentIndex: 1),
+            builder: (context) => const CallingEmergencyPage(),
           ),
         );
       } else if (result == '1') {
@@ -46,7 +47,7 @@ class _SosClickedPageState extends State<SosClickedPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeBottomNavigation(currentIndex: 1),
+            builder: (context) => const CallingEmergencyPage(),
           ),
         );
       } else if (result == 'cancel') {
