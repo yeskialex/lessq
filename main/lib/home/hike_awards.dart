@@ -52,6 +52,13 @@ class HikeAwards extends StatelessWidget {
                             ),
                           ),
                         ),
+                        // Confetti GIF overlay
+                        Image.asset(
+                          'assets/images/confetti.gif',
+                          width: 600,
+                          height: 600,
+                          fit: BoxFit.contain,
+                        ),
                       ],
                     ),
                   ),

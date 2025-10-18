@@ -47,12 +47,12 @@ class _HikeActivePageState extends State<HikeActivePage> {
   }
 
   void _startHike() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (!_isPaused) {
         setState(() {
           _elapsedSeconds++;
 
-          // Update progress: faster rate (completes in ~2 minutes)
+          // Update progress: faster rate (completes in ~1 minute)
           _progress = math.min(1.0, _progress + (1.0 / 120));
 
           // Update heart rate with smooth fluctuation (gradual changes between 110-155)
@@ -60,11 +60,11 @@ class _HikeActivePageState extends State<HikeActivePage> {
           final heartRateVariation = (math.sin(_elapsedSeconds / 10) * 20).round();
           _heartRate = 130 + heartRateVariation;
 
-          // Update calories faster (roughly 1 calorie every 2 seconds)
-          _calories = (_elapsedSeconds / 2).round();
+          // Update calories faster (roughly 1 calorie every second)
+          _calories = _elapsedSeconds;
 
-          // Update distance to next stop (decrease by 2m per second)
-          _distanceToNextStop = math.max(0, 200 - (_elapsedSeconds * 2) % 200);
+          // Update distance to next stop (decrease by 4m per tick = 8m per second)
+          _distanceToNextStop = math.max(0, 200 - (_elapsedSeconds * 4) % 200);
 
           // Trigger chest pain warning at 7% progress
           if (_progress >= 0.07 && !_hasShownChestPainWarning) {
