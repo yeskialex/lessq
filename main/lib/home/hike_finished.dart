@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/home/profile_awards.dart';
 import 'bottom_navigation.dart';
 import 'hike_summary.dart';
 import 'hike_awards.dart';

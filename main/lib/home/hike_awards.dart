@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'bottom_navigation.dart';
 
 class HikeAwards extends StatelessWidget {
@@ -8,196 +9,143 @@ class HikeAwards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF464646),
-      body: SingleChildScrollView(
-        child: Container(
-          width: 408,
-          height: 1018,
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(color: Color(0xFF464646)),
-          child: Stack(
-            children: [
-            Positioned(
-              left: 22.98,
-              top: 200,
-              child: Container(
-                width: 356,
-                height: 356,
-                decoration: ShapeDecoration(
-                  color: const Color(0x4CDCFF00),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Back button
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 12,
-                      top: 12,
-                      child: Icon(
-                        Icons.ios_share,
-                        color: Colors.white,
-                        size: 20,
+              ),
+            ),
+
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Award illustration with confetti and rays
+                  SizedBox(
+                    height: 300,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Gray rays background
+                        CustomPaint(
+                          size: const Size(300, 300),
+                          painter: RaysPainter(),
+                        ),
+                        // Cheetah/Award illustration
+                        Container(
+                          width: 200,
+                          height: 200,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/award1.png'),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // Award title with wings
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/icons/leftwing.png',
+                        width: 30,
+                        height: 30,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const SizedBox(width: 30, height: 30);
+                        },
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 22.98,
-              top: 580,
-              child: Container(
-                width: 356,
-                height: 356,
-                decoration: ShapeDecoration(
-                  color: const Color(0x4CDCFF00),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 12,
-                      top: 12,
-                      child: Icon(
-                        Icons.ios_share,
-                        color: Colors.white,
-                        size: 20,
+                      const SizedBox(width: 8),
+                      const Text(
+                        'SPEED STAR',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 124.98,
-              top: 272,
-              child: Container(
-                width: 127,
-                height: 192,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/award1.png'),
-                    fit: BoxFit.cover,
+                      const SizedBox(width: 8),
+                      Image.asset(
+                        'assets/icons/rightwing.png',
+                        width: 30,
+                        height: 30,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const SizedBox(width: 30, height: 30);
+                        },
+                      ),
+                    ],
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 38.98,
-              top: 483,
-              child: SizedBox(
-                width: 326,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/leftwing.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'SPEED STAR',
+
+                  const SizedBox(height: 20),
+
+                  // Description text
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: Text(
+                      'You reached the summit 20 minutes earlier\nthan the average hiker!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 34,
+                        color: Colors.white,
+                        fontSize: 14,
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        height: 1.18,
+                        fontWeight: FontWeight.w400,
+                        height: 1.5,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Image.asset(
-                      'assets/icons/rightwing.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 38.98,
-              top: 863,
-              child: SizedBox(
-                width: 326,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/leftwing.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'New Record',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 34,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        height: 1.18,
+                  ),
+
+                  const SizedBox(height: 60),
+
+                  // Share button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Handle share action
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFDCFF00),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'Share',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Image.asset(
-                      'assets/icons/rightwing.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const Positioned(
-              left: 103,
-              top: 110,
-              child: SizedBox(
-                width: 213,
-                child: Text(
-                  'Mr. Kim Ha-Joon\nYou are...',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontFamily: 'SF Pro',
-                    fontWeight: FontWeight.w500,
-                    height: 1.10,
                   ),
-                ),
+                ],
               ),
             ),
-            Positioned(
-              left: 95,
-              top: 632,
-              child: Container(
-                width: 197,
-                height: 223,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/trophy.png'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 16,
-              top: 50,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            ],
-          ),
+          ],
         ),
       ),
       bottomNavigationBar: Container(
@@ -261,4 +209,43 @@ class HikeAwards extends StatelessWidget {
       ),
     );
   }
+}
+
+// Custom painter for the gray rays background
+class RaysPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF5A5A5A)
+      ..style = PaintingStyle.fill;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    const numRays = 16;
+    const rayLength = 150.0;
+
+    for (int i = 0; i < numRays; i++) {
+      final angle = (i * 2 * math.pi) / numRays;
+      final path = Path();
+      path.moveTo(center.dx, center.dy);
+
+      // Calculate the two outer points of the ray triangle
+      final angle1 = angle - 0.1;
+      final angle2 = angle + 0.1;
+
+      path.lineTo(
+        center.dx + rayLength * math.cos(angle1),
+        center.dy + rayLength * math.sin(angle1),
+      );
+      path.lineTo(
+        center.dx + rayLength * math.cos(angle2),
+        center.dy + rayLength * math.sin(angle2),
+      );
+
+      path.close();
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

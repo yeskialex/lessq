@@ -84,7 +84,7 @@ class HikeConfirmPage extends StatelessWidget {
 
                             // Download button (bottom right)
                             Positioned(
-                              right: 32,
+                              right: 50,
                               bottom: 16,
                               child: Container(
                                 width: 46,

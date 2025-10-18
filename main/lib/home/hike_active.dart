@@ -140,11 +140,16 @@ class _HikeActivePageState extends State<HikeActivePage> {
     );
 
     if (result == 'pause') {
-      // Simulate calling 119 (dummy action)
-      // You can add any action here, like showing a message or logging
-      setState(() {
-        _isPaused = true;
-      });
+      // Navigate to calling emergency page
+      _timer?.cancel();
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CallingEmergencyPage(),
+          ),
+        );
+      }
     } else if (result == 'cancel') {
       // Resume the hike
       setState(() {
@@ -168,10 +173,16 @@ class _HikeActivePageState extends State<HikeActivePage> {
     );
 
     if (result == 'pause') {
-      // Simulate calling 119 (dummy action)
-      setState(() {
-        _isPaused = true;
-      });
+      // Navigate to calling emergency page
+      _timer?.cancel();
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CallingEmergencyPage(),
+          ),
+        );
+      }
     } else if (result == 'cancel') {
       // Resume the hike
       setState(() {
@@ -195,10 +206,16 @@ class _HikeActivePageState extends State<HikeActivePage> {
     );
 
     if (result == 'pause') {
-      // Simulate calling 119 (dummy action)
-      setState(() {
-        _isPaused = true;
-      });
+      // Navigate to calling emergency page
+      _timer?.cancel();
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CallingEmergencyPage(),
+          ),
+        );
+      }
     } else if (result == 'cancel') {
       // Resume the hike
       setState(() {

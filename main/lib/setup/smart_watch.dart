@@ -36,7 +36,7 @@ class _SmartWatchPageState extends State<SmartWatchPage> {
 
         // Check adapter state
         final adapterState = await FlutterBluePlus.adapterState.first;
-        debugPrint('Bluetooth adapter state: $adapterState');
+        // debugPrint('Bluetooth adapter state: $adapterState');
 
         if (!mounted) return;
 
