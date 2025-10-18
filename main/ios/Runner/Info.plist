@@ -36,6 +36,8 @@
 	<string>This app needs location access to share your location during emergencies</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs location access to share your location during emergencies</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app needs access to save trail maps to your photo library</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

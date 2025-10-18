@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'hike_active.dart';
 import 'bottom_navigation.dart';
+import '../services/native_alert_service.dart';
 
-class HikeConfirmPage extends StatelessWidget {
+class HikeConfirmPage extends StatefulWidget {
   final String trailTitle;
   final String distance;
   final String time;
@@ -16,6 +17,33 @@ class HikeConfirmPage extends StatelessWidget {
     required this.time,
     required this.difficulty,
   });
+
+  @override
+  State<HikeConfirmPage> createState() => _HikeConfirmPageState();
+}
+
+class _HikeConfirmPageState extends State<HikeConfirmPage> {
+  Future<void> _showDownloadConfirmation() async {
+    final result = await NativeAlertService.showWarningAlert(
+      title: 'Download image to gallery?',
+      message: '',
+      pauseButtonText: 'Yes',
+      cancelButtonText: 'Cancel',
+    );
+
+    if (result == 'pause') {
+      _showDownloadSuccess();
+    }
+  }
+
+  Future<void> _showDownloadSuccess() async {
+    await NativeAlertService.showWarningAlert(
+      title: 'Downloaded',
+      message: '',
+      pauseButtonText: 'Start Hiking',
+      cancelButtonText: 'Close',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +110,12 @@ class HikeConfirmPage extends StatelessWidget {
                             ),
                           ),
 
-                            // Download button (bottom right)
-                            Positioned(
-                              right: 50,
-                              bottom: 16,
+                          // Download button (bottom right)
+                          Positioned(
+                            right: 50,
+                            bottom: 16,
+                            child: GestureDetector(
+                              onTap: _showDownloadConfirmation,
                               child: Container(
                                 width: 46,
                                 height: 46,
@@ -100,8 +130,9 @@ class HikeConfirmPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 40),
                   ],
@@ -118,9 +149,9 @@ class HikeConfirmPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => HikeActivePage(
-                        trailTitle: trailTitle,
-                        totalDistance: distance,
-                        estimatedTime: time,
+                        trailTitle: widget.trailTitle,
+                        totalDistance: widget.distance,
+                        estimatedTime: widget.time,
                       ),
                     ),
                   );

@@ -40,20 +40,21 @@ import UIKit
     }
 
     // Create native iOS alert
-    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    let alert = UIAlertController(title: title, message: message.isEmpty ? nil : message, preferredStyle: .alert)
 
     // Pause button (primary action)
     let pauseAction = UIAlertAction(title: pauseButton, style: .default) { _ in
       result("pause")
     }
-
-    // Cancel button (secondary action)
-    let cancelAction = UIAlertAction(title: cancelButton, style: .cancel) { _ in
-      result("cancel")
-    }
-
     alert.addAction(pauseAction)
-    alert.addAction(cancelAction)
+
+    // Cancel button (secondary action) - only add if not empty
+    if !cancelButton.isEmpty {
+      let cancelAction = UIAlertAction(title: cancelButton, style: .cancel) { _ in
+        result("cancel")
+      }
+      alert.addAction(cancelAction)
+    }
 
     // Present on main thread
     DispatchQueue.main.async {
