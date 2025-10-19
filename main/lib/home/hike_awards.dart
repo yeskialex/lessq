@@ -14,7 +14,7 @@ class HikeAwards extends StatelessWidget {
           children: [
             // Back button
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0, bottom: 0.0),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: IconButton(
@@ -28,7 +28,7 @@ class HikeAwards extends StatelessWidget {
 
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // Award illustration with confetti and rays
                   SizedBox(
@@ -73,6 +73,7 @@ class HikeAwards extends StatelessWidget {
                         'assets/icons/leftwing.png',
                         width: 30,
                         height: 30,
+                        color: Colors.white,
                         errorBuilder: (context, error, stackTrace) {
                           return const SizedBox(width: 30, height: 30);
                         },
@@ -93,6 +94,7 @@ class HikeAwards extends StatelessWidget {
                         'assets/icons/rightwing.png',
                         width: 30,
                         height: 30,
+                        color: Colors.white,
                         errorBuilder: (context, error, stackTrace) {
                           return const SizedBox(width: 30, height: 30);
                         },
@@ -110,7 +112,7 @@ class HikeAwards extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         height: 1.5,
@@ -122,10 +124,10 @@ class HikeAwards extends StatelessWidget {
 
                   // Share button
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 100),
                     child: SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      height: 45,
                       child: ElevatedButton(
                         onPressed: () {
                           // Handle share action
@@ -141,7 +143,7 @@ class HikeAwards extends StatelessWidget {
                           'Share',
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 16,
+                            fontSize: 14,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                           ),
@@ -222,10 +224,6 @@ class HikeAwards extends StatelessWidget {
 class RaysPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF5A5A5A)
-      ..style = PaintingStyle.fill;
-
     final center = Offset(size.width / 2, size.height / 2);
     const numRays = 16;
     const rayLength = 150.0;
@@ -239,16 +237,37 @@ class RaysPainter extends CustomPainter {
       final angle1 = angle - 0.1;
       final angle2 = angle + 0.1;
 
-      path.lineTo(
+      final outerPoint1 = Offset(
         center.dx + rayLength * math.cos(angle1),
         center.dy + rayLength * math.sin(angle1),
       );
-      path.lineTo(
+      final outerPoint2 = Offset(
         center.dx + rayLength * math.cos(angle2),
         center.dy + rayLength * math.sin(angle2),
       );
 
+      path.lineTo(outerPoint1.dx, outerPoint1.dy);
+      path.lineTo(outerPoint2.dx, outerPoint2.dy);
       path.close();
+
+      // Create gradient shader from center (bright) to edge (transparent)
+      final paint = Paint()
+        ..shader = RadialGradient(
+          center: Alignment.center,
+          radius: 0.5,
+          colors: [
+            const Color(0xFFD0D0D0), // Very bright gray in center
+            const Color(0xFF9A9A9A).withOpacity(0.7), // Mid opacity
+            const Color(0xFF5A5A5A).withOpacity(0.0), // Transparent at edges
+          ],
+          stops: const [0.0, 0.5, 1.0],
+        ).createShader(Rect.fromCenter(
+          center: center,
+          width: rayLength * 2,
+          height: rayLength * 2,
+        ))
+        ..style = PaintingStyle.fill;
+
       canvas.drawPath(path, paint);
     }
   }

@@ -4,6 +4,7 @@ import 'profile_awards.dart';
 import 'profile_detail.dart';
 import 'profile_routes.dart';
 import 'profile_settings.dart';
+import '../login/sign_in.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -237,7 +238,36 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 40),
+
+                // Logout option
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignInPage()),
+                        (route) => false,
+                      );
+                    },
+                    child: const Center(
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 40),
               ],
             ),
           ),
