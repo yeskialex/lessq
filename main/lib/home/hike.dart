@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'hike_confirm.dart';
 
 class HikePage extends StatefulWidget {
@@ -11,7 +10,6 @@ class HikePage extends StatefulWidget {
 
 class _HikePageState extends State<HikePage> {
   int? selectedTrailIndex;
-  bool isFilterMenuOpen = false;
   String sortBy = 'none'; // 'none', 'name', or 'difficulty'
 
   final List<Map<String, String>> allTrails = [
@@ -53,16 +51,9 @@ class _HikePageState extends State<HikePage> {
     });
   }
 
-  void toggleFilterMenu() {
-    setState(() {
-      isFilterMenuOpen = !isFilterMenuOpen;
-    });
-  }
-
   void setSortBy(String sortType) {
     setState(() {
       sortBy = sortType;
-      isFilterMenuOpen = false;
       selectedTrailIndex = null; // Reset selection when sorting changes
     });
   }
@@ -127,7 +118,7 @@ class _HikePageState extends State<HikePage> {
                             'Seoul',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 12,
+                              fontSize: 14,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
                             ),
@@ -135,109 +126,89 @@ class _HikePageState extends State<HikePage> {
                         ],
                       ),
                     ),
-                    // Hamburger menu button or Filter options
-                    GestureDetector(
-                      onTap: toggleFilterMenu,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        child: isFilterMenuOpen
-                            ? Container(
-                                key: const ValueKey('filter_menu'),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                decoration: ShapeDecoration(
-                                  color: const Color(0xFFDCFF00),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(21),
+                    // Filter options
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFFDCFF00),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(21),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () => setSortBy('name'),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black, width: 2),
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: sortBy == 'name' ? Colors.black : Colors.transparent,
+                                  ),
+                                  child: sortBy == 'name'
+                                      ? const Icon(
+                                          Icons.check,
+                                          color: Color(0xFFDCFF00),
+                                          size: 12,
+                                        )
+                                      : null,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'By Name',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () => setSortBy('name'),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            width: 16,
-                                            height: 16,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.black, width: 2),
-                                              borderRadius: BorderRadius.circular(4),
-                                              color: sortBy == 'name' ? Colors.black : Colors.transparent,
-                                            ),
-                                            child: sortBy == 'name'
-                                                ? const Icon(
-                                                    Icons.check,
-                                                    color: Color(0xFFDCFF00),
-                                                    size: 12,
-                                                  )
-                                                : null,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          const Text(
-                                            'By Name',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    GestureDetector(
-                                      onTap: () => setSortBy('difficulty'),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            width: 16,
-                                            height: 16,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.black, width: 2),
-                                              borderRadius: BorderRadius.circular(4),
-                                              color: sortBy == 'difficulty' ? Colors.black : Colors.transparent,
-                                            ),
-                                            child: sortBy == 'difficulty'
-                                                ? const Icon(
-                                                    Icons.check,
-                                                    color: Color(0xFFDCFF00),
-                                                    size: 12,
-                                                  )
-                                                : null,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          const Text(
-                                            'By Difficulty',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          GestureDetector(
+                            onTap: () => setSortBy('difficulty'),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black, width: 2),
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: sortBy == 'difficulty' ? Colors.black : Colors.transparent,
+                                  ),
+                                  child: sortBy == 'difficulty'
+                                      ? const Icon(
+                                          Icons.check,
+                                          color: Color(0xFFDCFF00),
+                                          size: 12,
+                                        )
+                                      : null,
                                 ),
-                              )
-                            : SizedBox(
-                                key: const ValueKey('hamburger'),
-                                width: 35,
-                                height: 36,
-                                child: Center(
-                                  child: SvgPicture.asset(
-                                    'assets/icons/hamburger.svg',
-                                    width: 20,
-                                    height: 20,
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'By Difficulty',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                              ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

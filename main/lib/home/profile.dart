@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'profile_awards.dart';
 import 'profile_detail.dart';
 import 'profile_routes.dart';
@@ -180,11 +179,11 @@ class ProfilePage extends StatelessWidget {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildRoutePlaceholder('assets/images/route1.svg'),
+                      _buildRoutePlaceholder('assets/images/route1.png'),
                       const SizedBox(width: 12),
-                      _buildRoutePlaceholder('assets/images/route2.svg'),
+                      _buildRoutePlaceholder('assets/images/route2.png'),
                       const SizedBox(width: 12),
-                      _buildRoutePlaceholder(null),
+                      _buildRoutePlaceholder('assets/images/route3.png'),
                     ],
                   ),
                 ),
@@ -229,11 +228,11 @@ class ProfilePage extends StatelessWidget {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildAwardPlaceholder('assets/images/award1.png'),
+                      _buildAwardPlaceholder('assets/images/awarding1.png'),
                       const SizedBox(width: 12),
-                      _buildAwardPlaceholder('assets/images/trophy.png'),
+                      _buildAwardPlaceholder('assets/images/awarding2.png'),
                       const SizedBox(width: 12),
-                      _buildAwardPlaceholder('assets/images/trophy.png'),
+                      _buildAwardPlaceholder('assets/images/awarding3.png'),
                     ],
                   ),
                 ),
@@ -321,12 +320,9 @@ class ProfilePage extends StatelessWidget {
       child: imagePath != null
           ? ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Opacity(
-                opacity: 1.0,
-                child: SvgPicture.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                ),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
               ),
             )
           : const Center(
@@ -348,11 +344,11 @@ class ProfilePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: imagePath != null
-          ? Padding(
-              padding: const EdgeInsets.all(16.0),
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(12),
               child: Image.asset(
                 imagePath,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               ),
             )
           : const Center(

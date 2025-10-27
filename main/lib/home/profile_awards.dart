@@ -51,16 +51,65 @@ class ProfileAwardsPage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 16),
 
-                    // Grid of awards
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
-                    const SizedBox(height: 16),
-                    _buildAwardRow('SPEED STAR', 'NEW RECORD'),
+                    // Grid of awards (2 columns)
+                    GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: 50,
+                      mainAxisSpacing: 20,
+                      childAspectRatio: 0.62,
+                      children: [
+                        _buildAwardCard(
+                          title: 'NEW RECORD',
+                          description: 'You\'ve set a new record!',
+                          imagePath: 'assets/images/awarding1.png',
+                          isLocked: false,
+                        ),
+                        _buildAwardCard(
+                          title: 'KING OF HIKER',
+                          description: 'You\'ve completed all the mountains!',
+                          imagePath: 'assets/images/awarding2.png',
+                          isLocked: false,
+                        ),
+                        _buildAwardCard(
+                          title: 'Monthly',
+                          description: 'You\'ve earned the title of Monthly 2nd Place!',
+                          imagePath: 'assets/images/awarding3.png',
+                          isLocked: false,
+                        ),
+                        _buildAwardCard(
+                          title: '???',
+                          description: '???',
+                          imagePath: null,
+                          isLocked: true,
+                        ),
+                        _buildAwardCard(
+                          title: '???',
+                          description: '???',
+                          imagePath: null,
+                          isLocked: true,
+                        ),
+                        _buildAwardCard(
+                          title: '???',
+                          description: '???',
+                          imagePath: null,
+                          isLocked: true,
+                        ),
+                        _buildAwardCard(
+                          title: '???',
+                          description: '???',
+                          imagePath: null,
+                          isLocked: true,
+                        ),
+                        _buildAwardCard(
+                          title: '???',
+                          description: '???',
+                          imagePath: null,
+                          isLocked: true,
+                        ),
+                      ],
+                    ),
 
                     const SizedBox(height: 16),
                   ],
@@ -90,63 +139,104 @@ class ProfileAwardsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAwardRow(String leftLabel, String rightLabel) {
-    return Row(
+  Widget _buildAwardCard({
+    required String title,
+    required String description,
+    required String? imagePath,
+    required bool isLocked,
+  }) {
+    return Column(
       children: [
-        Expanded(
-          child: _buildAwardCard(leftLabel, 'assets/images/trophy.png'),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _buildAwardCard(rightLabel, 'assets/images/award1.png'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAwardCard(String label, String imagePath) {
-    return Container(
-      height: 160,
-      decoration: BoxDecoration(
-        color: const Color(0x8EC6E500),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 16),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.contain,
+        AspectRatio(
+          aspectRatio: 1.0,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isLocked ? const Color(0xFFDCFF00).withValues(alpha: 0.3) : const Color(0xFFDCFF00),
+                width: 2,
               ),
+            ),
+            child: Center(
+              child: isLocked
+                  ? Icon(
+                      Icons.lock,
+                      color: const Color(0xFFDCFF00).withValues(alpha: 0.3),
+                      size:50,
+                    )
+                  : imagePath != null
+                      ? Image.asset(
+                          imagePath,
+                          fit: BoxFit.contain,
+                        )
+                      : const SizedBox.shrink(),
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0x8EC6E500),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
+        ),
+        const SizedBox(height: 8),
+        // Title with wing brackets
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                isLocked ? Colors.white.withValues(alpha: 0.3) : Colors.white,
+                BlendMode.srcIn,
+              ),
+              child: Image.asset(
+                'assets/icons/leftwing.png',
+                width: 20,
+                height: 20,
               ),
             ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w700,
+            const SizedBox(width: 0),
+            Flexible(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: isLocked ? Colors.white.withValues(alpha: 0.3) : Colors.white,
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+            ),
+            const SizedBox(width: 0),
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                isLocked ? Colors.white.withValues(alpha: 0.3) : Colors.white,
+                BlendMode.srcIn,
+              ),
+              child: Image.asset(
+                'assets/icons/rightwing.png',
+                width: 20,
+                height: 20,
+              ),
+            ),
+          ],
+        ),
+        if (!isLocked) ...[
+          const SizedBox(height: 4),
+          // Description
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 11,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              height: 1.3,
             ),
           ),
         ],
-      ),
+      ],
     );
   }
 

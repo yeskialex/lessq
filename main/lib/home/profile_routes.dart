@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'bottom_navigation.dart';
 
 class ProfileRoutesPage extends StatelessWidget {
@@ -56,24 +55,24 @@ class ProfileRoutesPage extends StatelessWidget {
                     // Route 1
                     _buildRouteCard(
                       'Samcheonsa Trail',
-                      'assets/images/route1.svg',
-                      'You reported an accident. Please confirm your status. Only select "Urgent Help Needed" if immediate assistance is critical.',
+                      'assets/images/detailroute1.png',
+                      'The bathroom is not good to super dry, be careful.',
                     ),
                     const SizedBox(height: 32),
 
                     // Route 2
                     _buildRouteCard(
                       'Baegundae - Ui Gugok Trail',
-                      'assets/images/route2.svg',
-                      null,
+                      'assets/images/detailroute2.png',
+                      'Wild boars — I was been spotted around red step. Stay alert.',
                     ),
                     const SizedBox(height: 32),
 
                     // Route 3
                     _buildRouteCard(
-                      'Samcheonsa Trail',
-                      'assets/images/route1.svg',
-                      null,
+                      'Cheonwangbong Peak Trail',
+                      'assets/images/detailroute3.png',
+                      'The slope is pretty steep, so be careful.',
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -103,7 +102,7 @@ class ProfileRoutesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRouteCard(String title, String svgPath, String? warningText) {
+  Widget _buildRouteCard(String title, String imagePath, String? warningText) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -126,31 +125,58 @@ class ProfileRoutesPage extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFF2A2A2A),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: const Color(0xFFDCFF00),
-              width: 2,
-            ),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: SvgPicture.asset(
-              svgPath,
+            child: Image.asset(
+              imagePath,
               fit: BoxFit.cover,
             ),
           ),
         ),
 
-        // Warning text if provided
+        // Notes section if provided
         if (warningText != null) ...[
           const SizedBox(height: 12),
-          Text(
-            warningText,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              height: 1.5,
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF464646),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Notes',
+                  style: TextStyle(
+                    color: Color(0xFFDCFF00),
+                    fontSize: 12,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    warningText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(
+                  Icons.edit_outlined,
+                  color: Colors.white,
+                  size: 16,
+                ),
+              ],
             ),
           ),
         ],

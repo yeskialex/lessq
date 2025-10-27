@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'bottom_navigation.dart';
 
 class CallingEmergencyPage extends StatelessWidget {
   const CallingEmergencyPage({super.key});
@@ -106,7 +107,12 @@ class CallingEmergencyPage extends StatelessWidget {
                 _buildCallButton(
                   icon: Icons.call_end,
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeBottomNavigation(currentIndex: 1),
+                      ),
+                    );
                   },
                   backgroundColor: const Color(0xFFF72D2D),
                 ),
