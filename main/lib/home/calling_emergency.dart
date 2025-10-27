@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'bottom_navigation.dart';
+import 'sos_chat.dart';
 
 class CallingEmergencyPage extends StatelessWidget {
   const CallingEmergencyPage({super.key});
@@ -110,7 +110,7 @@ class CallingEmergencyPage extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeBottomNavigation(currentIndex: 1),
+                        builder: (context) => const SosChatPage(),
                       ),
                     );
                   },

@@ -150,8 +150,12 @@ class HikeSummaryPage extends StatelessWidget {
                         )
                       ],
                     ),
-                    child: CustomPaint(
-                      painter: TrailMapPainter(),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        'assets/images/detailroute1.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -370,55 +374,4 @@ class HikeSummaryPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class TrailMapPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFFDCFF00)
-      ..strokeWidth = 4
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    final dotPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
-
-    // Define trail points (relative positions)
-    final points = [
-      Offset(60, size.height - 150),
-      Offset(97, size.height - 110),
-      Offset(140, size.height - 75),
-      Offset(201, size.height - 50),
-      Offset(278, size.height - 28),
-      Offset(291, size.height - 80),
-      Offset(345, size.height - 110),
-    ];
-
-    // Draw the trail path
-    final path = Path();
-    path.moveTo(points[0].dx, points[0].dy);
-    for (int i = 1; i < points.length; i++) {
-      path.lineTo(points[i].dx, points[i].dy);
-    }
-    canvas.drawPath(path, paint);
-
-    // Draw dots at waypoints
-    for (var point in points) {
-      canvas.drawCircle(point, 5, dotPaint);
-    }
-
-    // Draw end marker (location pin)
-    final endPoint = points.last;
-    final pinPaint = Paint()
-      ..color = const Color(0xFFDCFF00)
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(endPoint, 9, pinPaint);
-    canvas.drawCircle(endPoint, 4, Paint()..color = Colors.black);
-  }
-
-  @override
-  bool shouldRepaint(TrailMapPainter oldDelegate) => false;
 }

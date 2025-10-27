@@ -43,11 +43,11 @@ class HikeAwards extends StatelessWidget {
                         ),
                         // Cheetah/Award illustration
                         Container(
-                          width: 200,
-                          height: 200,
+                          width: 180,
+                          height: 180,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/award1.png'),
+                              image: AssetImage('assets/images/elements.png'),
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -63,7 +63,7 @@ class HikeAwards extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
 
                   // Award title with wings
                   Row(
@@ -80,7 +80,7 @@ class HikeAwards extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'SPEED STAR',
+                        'NEW RECORD',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 32,
@@ -108,7 +108,7 @@ class HikeAwards extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40),
                     child: Text(
-                      'You reached the summit 20 minutes earlier\nthan the average hiker!',
+                      'You\'ve set a new record!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
